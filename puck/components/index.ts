@@ -4,6 +4,7 @@ export * from "./Heading";
 export * from "./Text";
 export * from "./Button";
 export * from "./Hero";
+export * from "./Hero2";
 export * from "./gallery/GalleryCol";
 export * from "./gallery/GalleryGrid";
 export * from "./gallery/GalleryGrid6";

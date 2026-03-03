@@ -10,7 +10,7 @@ export const categories: Config<PuckProps>["categories"] = {
   },
   Prebuilt: {
     title: "Hero Components",
-    components: ["Hero"],
+    components: ["Hero", "Hero2"],
   },
   Gallery: {
     title: "Gallery Components",

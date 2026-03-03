@@ -36,6 +36,51 @@ export interface HeroProps {
   };
 }
 
+// Hero2 Component Props
+export interface Hero2Props {
+  logo?: {
+    src?: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+  };
+  mainImage?: string;
+  mainImageAlt?: string;
+  overlayImage?: string;
+  overlayImageAlt?: string;
+  shadowImage?: string;
+  shadowImageAlt?: string;
+  watermarkText?: string;
+  titlePrimary?: string;
+  titleSecondary?: string;
+  description?: string;
+  productName?: string;
+  originalPrice?: string;
+  discountPrice?: string;
+  priceSuffix?: string;
+  cta?: {
+    text?: string;
+    href?: string;
+    icon?: React.ReactNode;
+  };
+  secondaryCta?: {
+    text?: string;
+    href?: string;
+    icon?: React.ReactNode;
+  };
+  settings?: {
+    showWatermark?: boolean;
+    showShadow?: boolean;
+    showPolaroid?: boolean;
+    showCtaIcon?: boolean;
+  };
+  theme?: {
+    primaryColor?: string;
+    textColor?: string;
+    descriptionColor?: string;
+  };
+}
+
 // Features Component Props
 export interface FeatureItem {
   text: string;
