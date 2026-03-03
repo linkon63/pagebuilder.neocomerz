@@ -9,8 +9,11 @@ export interface HeroProps {
     height?: number;
   };
   title?: string;
+  titleSize?: string;
   subtitle?: string;
+  subtitleSize?: string;
   discountTag?: string;
+  discountTagSize?: string;
   cta?: {
     text?: string;
     href?: string;

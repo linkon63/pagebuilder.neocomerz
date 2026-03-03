@@ -15,8 +15,11 @@ export default function Hero({
     height: 50,
   },
   title = "STYLISH & COMFORTABLE",
+  titleSize,
   subtitle = "SUMMER COLLECTION",
+  subtitleSize,
   discountTag = "UP TO 50% OFF",
+  discountTagSize,
   cta = {
     text: "SHOP NOW",
     href: "#",
@@ -99,13 +102,13 @@ export default function Hero({
             <h1 className={textAlignment === 'center' ? 'text-center' : ''}>
               <span
                 className="block text-4xl sm:text-5xl font-bold leading-tight md:text-7xl lg:text-8xl md:leading-[1.1] lg:leading-[96px]"
-                style={{ color: primaryColor }}
+                style={{ color: primaryColor, fontSize: titleSize || undefined }}
               >
                 {displayTitle}
               </span>
               <span 
                 className="block text-2xl sm:text-3xl font-normal leading-tight mt-1 md:text-6xl md:leading-[1.1] lg:leading-[72px]"
-                style={{ color: textColor }}
+                style={{ color: textColor, fontSize: subtitleSize || undefined }}
               >
                 {displaySubtitle}
               </span>
@@ -116,7 +119,7 @@ export default function Hero({
             <h2 className={textAlignment === 'center' ? 'text-center' : ''}>
               <span 
                 className="block text-4xl sm:text-5xl leading-tight mt-1 md:text-7xl lg:text-7xl md:leading-[1.1] lg:leading-[72px]"
-                style={{ color: textColor }}
+                style={{ color: textColor, fontSize: discountTagSize || undefined }}
               >
                 {displayDiscount}
               </span>
