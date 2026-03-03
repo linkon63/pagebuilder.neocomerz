@@ -26,19 +26,17 @@ const heroData: HeroProps = {
     width: 180,
     height: 42,
   },
-  title: {
-    main: "প্রিমিয়াম",
-    subtitle: "Quality Indian Punjabi",
-    discount: "30% Discount",
-  },
-  ctaButton: {
+  title: "প্রিমিয়াম",
+  subtitle: "Quality Indian Punjabi",
+  discountTag: "30% Discount",
+  cta: {
     text: "এখনই অর্ডার করুন",
     href: "#order-form",
-    icon: <LuShoppingBag className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
+    icon: <LuShoppingBag />,
   },
-  colors: {
-    primary: "#F36621",
-    text: "#222F28",
+  theme: {
+    primaryColor: "#F36621",
+    textColor: "#222F28",
   },
 };
 
@@ -85,7 +83,7 @@ const featuresData: FeaturesProps = {
   ctaButton: {
     text: "এখনই অর্ডার করুন",
     href: "#order-form",
-    icon: <LuShoppingBag className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />,
+    icon: <LuShoppingBag />,
   },
   tagline: "এটা শুধু একটা ড্রেস না—এটা এখনকার ফ্যাশন ট্রেন্ডের অংশ।",
   colors: {

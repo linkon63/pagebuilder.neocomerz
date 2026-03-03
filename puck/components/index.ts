@@ -4,3 +4,4 @@ export * from "./Heading";
 export * from "./Text";
 export * from "./Button";
 export * from "./Hero";
+export * from "./gallery/Gallery1";

@@ -74,20 +74,24 @@ function ProductSidebar() {
   );
 
   const addProduct = (product: Product) => {
-    const id = `product-${product.id}-${Math.random().toString(36).substr(2, 4)}`;
-    dispatch({
-      type: "insert",
-      componentType: "ProductHero",
-      destinationIndex: appState.data.content.length,
-      props: {
-        productId: product.id.toString(),
-        name: product.name.en,
-        price: product.variants[0]?.current_pricing?.unit_price || "N/A",
-        description: product.description.en || "",
-        image: product.thumbnail,
-        id,
-      },
-    });
+    // const id = `product-${product.id}-${Math.random().toString(36).substr(2, 4)}`;
+    // dispatch({
+    //   type: "insert",
+    //   componentType: "ProductHero",
+    //   destinationIndex: appState.data.content.length,
+    //   itemContent: {
+    //     type: "ProductHero",
+    //     props: {
+    //       productId: product.id.toString(),
+    //       name: product.name.en,
+    //       price: product.variants[0]?.current_pricing?.unit_price || "N/A",
+    //       description: product.description.en || "",
+    //       image: product.thumbnail,
+    //       id,
+    //     },
+    //   },
+    // });
+    console.warn("ProductHero component is missing. Cannot add product:", product.name.en);
   };
 
   return (
@@ -136,15 +140,6 @@ function ProductSidebar() {
   );
 }
 
-const productPlugin: Plugin = {
-  overrides: {
-    sidebar: ({ children }) => (
-      <div className="flex h-full w-full">
-        {children}
-      </div>
-    ),
-  },
-};
 
 function BuilderContent() {
   const [data, setData] = useState<any>({ content: [], root: {} });
@@ -182,22 +177,22 @@ function BuilderContent() {
           console.log("Publishing data:", data);
           setPublishData(data);
         }}
-        plugins={[
-          {
-            renderPluginRail: (props) => (
-              <>
-                {props.children}
-                <Puck.PluginRailItem item="products" label="Products" icon={<Package size={20} />} />
-              </>
-            ),
-            renderPluginSidebar: (props) => {
-              if (props.selectedItem === "products") {
-                return <ProductSidebar />;
-              }
-              return props.children;
-            }
-          }
-        ]}
+        // plugins={[
+        //   {
+        //     renderPluginRail: (props: any) => (
+        //       <>
+        //         {props.children}
+        //         <Puck.PluginRailItem item="products" label="Products" icon={<Package size={20} />} />
+        //       </>
+        //     ),
+        //     renderPluginSidebar: (props: any) => {
+        //       if (props.selectedItem === "products") {
+        //         return <ProductSidebar />;
+        //       }
+        //       return props.children;
+        //     }
+        //   } as any
+        // ]}
       />
 
       {publishData && (

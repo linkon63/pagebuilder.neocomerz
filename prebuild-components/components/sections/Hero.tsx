@@ -7,12 +7,21 @@ export default function Hero({
   backgroundImage,
   logo,
   title,
-  ctaButton,
-  colors = {
-    primary: '#F36621',
-    text: '#222F28'
+  subtitle,
+  discountTag,
+  cta,
+  theme = {
+    primaryColor: '#F36621',
+    textColor: '#222F28'
   }
 }: HeroProps) {
+  // Defensive checks for legacy data structures in prebuilds
+  const displayTitle = typeof title === 'object' ? (title as any).main : title;
+  const displaySubtitle = typeof title === 'object' ? (title as any).subtitle : subtitle;
+  const displayDiscount = typeof title === 'object' ? (title as any).discount : discountTag;
+
+  const { primaryColor = '#F36621', textColor = '#222F28' } = theme || {};
+
   return (
     <section
       className="relative w-full h-screen bg-cover bg-center bg-no-repeat"
@@ -22,37 +31,41 @@ export default function Hero({
 
       <div className="relative z-10 h-full flex items-end justify-center p-4 md:items-end md:justify-end md:p-0">
         <div className="w-full max-w-md bg-white/90 backdrop-blur-sm p-8 flex flex-col items-center gap-6 rounded-3xl rounded-t-[400px] md:max-w-none md:rounded-b-none md:w-[640px] md:mr-[180px] md:bg-white/80 md:pt-12 md:pb-16 md:px-12 md:gap-8 md:rounded-t-[400px] lg:w-[720px] lg:px-16 lg:rounded-t-[500px]">
-          <Image
-            src={logo.src}
-            alt={logo.alt}
-            width={logo.width}
-            height={logo.height}
-            style={{ width: 'auto', height: 'auto' }}
-            priority
-          />
+          {logo?.src && (
+            <Image
+              src={logo.src}
+              alt={logo.alt || ""}
+              width={logo.width || 180}
+              height={logo.height || 42}
+              style={{ width: 'auto', height: 'auto' }}
+              priority
+            />
+          )}
 
           <div className="self-stretch flex flex-col justify-start items-center">
             <h1 className="text-center">
-              <span className="block text-4xl sm:text-5xl font-bold leading-tight md:text-7xl lg:text-8xl md:leading-[1.1] lg:leading-[96px]" style={{ color: colors.primary }}>
-                {title.main}
+              <span className="block text-4xl sm:text-5xl font-bold leading-tight md:text-7xl lg:text-8xl md:leading-[1.1] lg:leading-[96px]" style={{ color: primaryColor }}>
+                {displayTitle}
               </span>
-              <span className="block text-[#222F28] text-2xl sm:text-3xl font-normal leading-tight mt-1 md:text-6xl md:leading-[1.1] lg:leading-[72px]">
-                {title.subtitle}
+              <span className="block text-[#222F28] text-2xl sm:text-3xl font-normal leading-tight mt-1 md:text-6xl md:leading-[1.1] lg:leading-[72px]" style={{ color: textColor }}>
+                {displaySubtitle}
               </span>
             </h1>
           </div>
 
-          {title.discount && (
+          {displayDiscount && (
             <h2 className="text-center">
-              <span className="block text-[#222F28] text-4xl sm:text-5xl leading-tight mt-1 md:text-7xl lg:text-7xl md:leading-[1.1] lg:leading-[72px]">
-                {title.discount}
+              <span className="block text-[#222F28] text-4xl sm:text-5xl leading-tight mt-1 md:text-7xl lg:text-7xl md:leading-[1.1] lg:leading-[72px]" style={{ color: textColor }}>
+                {displayDiscount}
               </span>
             </h2>
           )}
 
-          <PrimaryButton href={ctaButton.href} icon={ctaButton.icon}>
-            {ctaButton.text}
-          </PrimaryButton>
+          {cta && (
+            <PrimaryButton href={cta.href} icon={cta.icon}>
+              {cta.text}
+            </PrimaryButton>
+          )}
         </div>
       </div>
     </section>
