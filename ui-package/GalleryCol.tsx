@@ -1,22 +1,24 @@
-import React from "react";
-import Image from "next/image";
+import img1 from "@/ui-package/images/productFeature-3.jpg";
+import img2 from "@/ui-package/images/feature-4.jpg";
+import img3 from "@/ui-package/images/ProductImage1.webp";
+import img4 from "@/ui-package/images/ProductImage2.webp";
 
-export interface Gallery1Props {
+export interface GalleryColProps {
   title?: string;
   description?: string;
   images?: { src: string; alt?: string }[];
 }
 
-export default function Gallery1({
+export default function GalleryCol({
   title = "Our Product Gallery",
   description = "Check out our latest collection and high-quality product images.",
   images = [
-    { src: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800", alt: "Product 1" },
-    { src: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800", alt: "Product 2" },
-    { src: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&q=80&w=800", alt: "Product 3" },
-    { src: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800", alt: "Product 4" },
+    { src: img1.src, alt: "Product 1" },
+    { src: img2.src, alt: "Product 2" },
+    { src: img3.src, alt: "Product 3" },
+    { src: img4.src, alt: "Product 4" },
   ],
-}: Gallery1Props) {
+}: GalleryColProps) {
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,8 +27,13 @@ export default function Gallery1({
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">{description}</p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {images.map((image, index) => (
+        <div className={`grid grid-cols-1 sm:grid-cols-2 ${
+          images.length === 1 ? "lg:grid-cols-1" : 
+          images.length === 2 ? "lg:grid-cols-2" : 
+          images.length === 3 ? "lg:grid-cols-3" : 
+          "lg:grid-cols-4"
+        } gap-6`}>
+          {images.slice(0, 4).map((image, index) => (
             <div key={index} className="relative group aspect-square overflow-hidden rounded-2xl bg-gray-100">
               <img
                 src={image.src}

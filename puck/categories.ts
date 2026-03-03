@@ -9,7 +9,11 @@ export const categories: Config<PuckProps>["categories"] = {
     components: ["Heading", "Text", "Button"],
   },
   Prebuilt: {
-    title: "Prebuilt Components",
-    components: ["Hero", "Gallery1"],
+    title: "Hero Components",
+    components: ["Hero"],
+  },
+  Gallery: {
+    title: "Gallery Components",
+    components: ["GalleryCol", "GalleryGrid", "GalleryGrid6"],
   },
 };

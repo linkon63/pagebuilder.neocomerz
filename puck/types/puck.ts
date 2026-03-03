@@ -19,7 +19,17 @@ export type PuckProps = {
     contentAlignment?: 'left' | 'center' | 'right';
     primaryColor?: string; textColor?: string;
   };
-  Gallery1: {
+  GalleryCol: {
+    title?: string;
+    description?: string;
+    images?: { src: string; alt?: string }[];
+  };
+  GalleryGrid: {
+    title?: string;
+    description?: string;
+    images?: { src: string; alt?: string }[];
+  };
+  GalleryGrid6: {
     title?: string;
     description?: string;
     images?: { src: string; alt?: string }[];
