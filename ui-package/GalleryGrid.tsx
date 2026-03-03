@@ -1,8 +1,8 @@
-import img1 from "@/ui-package/images/ProductImage1.webp";
-import img2 from "@/ui-package/images/ProductImage2.webp";
-import img3 from "@/ui-package/images/ProductImage3.webp";
-import img4 from "@/ui-package/images/productFeature-1.jpg";
-import img5 from "@/ui-package/images/productFeature-2.webp";
+import img1 from "@/ui-package/images/products/product1.webp";
+import img2 from "@/ui-package/images/products/product2.webp";
+import img3 from "@/ui-package/images/products/product3.webp";
+import img4 from "@/ui-package/images/products/product4.webp";
+import img5 from "@/ui-package/images/products/product5.webp";
 
 export interface GalleryGridProps {
   title?: string;

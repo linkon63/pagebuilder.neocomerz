@@ -3,12 +3,11 @@ import { PuckProps } from "@/puck/types/puck";
 import { ImageUpload } from "@/components/ImageUpload";
 import GalleryGrid6UI from "@/ui-package/GalleryGrid6";
 
-import img1 from "@/ui-package/images/ProductImage1.webp";
-import img2 from "@/ui-package/images/ProductImage2.webp";
-import img3 from "@/ui-package/images/ProductImage3.webp";
-import img4 from "@/ui-package/images/productFeature-1.jpg";
-import img5 from "@/ui-package/images/productFeature-2.webp";
-import img6 from "@/ui-package/images/productFeature-3.jpg";
+import img1 from "@/ui-package/images/products/product1.webp";
+import img2 from "@/ui-package/images/products/product2.webp";
+import img3 from "@/ui-package/images/products/product3.webp";
+import img4 from "@/ui-package/images/products/product4.webp";
+import img5 from "@/ui-package/images/products/product5.webp";
 
 export const GalleryGrid6: ComponentConfig<PuckProps["GalleryGrid6"]> = {
   label: "Gallery Grid (6 Pack)",
@@ -47,7 +46,7 @@ export const GalleryGrid6: ComponentConfig<PuckProps["GalleryGrid6"]> = {
       { src: (img3 as any).src, alt: "Product 2" },
       { src: (img4 as any).src, alt: "Product 3" },
       { src: (img5 as any).src, alt: "Product 4" },
-      { src: (img6 as any).src, alt: "Product 5" },
+      { src: (img1 as any).src, alt: "Product 5" },
     ],
   },
   render: (props: any) => {

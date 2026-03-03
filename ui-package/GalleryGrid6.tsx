@@ -1,10 +1,8 @@
-import React from "react";
-import img1 from "@/ui-package/images/ProductImage1.webp";
-import img2 from "@/ui-package/images/ProductImage2.webp";
-import img3 from "@/ui-package/images/ProductImage3.webp";
-import img4 from "@/ui-package/images/productFeature-1.jpg";
-import img5 from "@/ui-package/images/productFeature-2.webp";
-import img6 from "@/ui-package/images/productFeature-3.jpg";
+import img1 from "@/ui-package/images/products/product1.webp";
+import img2 from "@/ui-package/images/products/product2.webp";
+import img3 from "@/ui-package/images/products/product3.webp";
+import img4 from "@/ui-package/images/products/product4.webp";
+import img5 from "@/ui-package/images/products/product5.webp";
 
 export interface GalleryGrid6Props {
   title?: string;
@@ -21,7 +19,7 @@ export default function GalleryGrid6({
     { src: img3.src, alt: "Product 2" },
     { src: img4.src, alt: "Product 3" },
     { src: img5.src, alt: "Product 4" },
-    { src: img6.src, alt: "Product 5" },
+    { src: img1.src, alt: "Product 5" },
   ],
 }: GalleryGrid6Props) {
   const imagesToDisplay = images.slice(0, 6);

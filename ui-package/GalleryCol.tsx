@@ -1,7 +1,7 @@
-import img1 from "@/ui-package/images/productFeature-3.jpg";
-import img2 from "@/ui-package/images/feature-4.jpg";
-import img3 from "@/ui-package/images/ProductImage1.webp";
-import img4 from "@/ui-package/images/ProductImage2.webp";
+import img1 from "@/ui-package/images/products/product1.webp";
+import img2 from "@/ui-package/images/products/product2.webp";
+import img3 from "@/ui-package/images/products/product3.webp";
+import img4 from "@/ui-package/images/products/product4.webp";
 
 export interface GalleryColProps {
   title?: string;

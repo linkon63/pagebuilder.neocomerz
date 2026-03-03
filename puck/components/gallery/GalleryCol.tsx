@@ -3,10 +3,10 @@ import { PuckProps } from "@/puck/types/puck";
 import { ImageUpload } from "@/components/ImageUpload";
 import GalleryColUI from "@/ui-package/GalleryCol";
 
-import img1 from "@/ui-package/images/productFeature-3.jpg";
-import img2 from "@/ui-package/images/feature-4.jpg";
-import img3 from "@/ui-package/images/ProductImage1.webp";
-import img4 from "@/ui-package/images/ProductImage2.webp";
+import img1 from "@/ui-package/images/products/product1.webp";
+import img2 from "@/ui-package/images/products/product2.webp";
+import img3 from "@/ui-package/images/products/product3.webp";
+import img4 from "@/ui-package/images/products/product4.webp";
 
 export const GalleryCol: ComponentConfig<PuckProps["GalleryCol"]> = {
   label: "Gallery Column",
