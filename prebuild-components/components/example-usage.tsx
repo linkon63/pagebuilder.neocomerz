@@ -1,5 +1,5 @@
 import React from "react";
-import { LuShoppingBag } from "react-icons/lu";
+import { ShoppingBag } from "lucide-react";
 import Hero from "./sections/Hero";
 import Features from "./sections/Features";
 import Testimonials from "./sections/Testimonials";
@@ -32,7 +32,7 @@ const heroData: HeroProps = {
   cta: {
     text: "এখনই অর্ডার করুন",
     href: "#order-form",
-    icon: <LuShoppingBag />,
+    icon: <ShoppingBag />,
   },
   theme: {
     primaryColor: "#F36621",
@@ -83,7 +83,7 @@ const featuresData: FeaturesProps = {
   ctaButton: {
     text: "এখনই অর্ডার করুন",
     href: "#order-form",
-    icon: <LuShoppingBag />,
+    icon: <ShoppingBag />,
   },
   tagline: "এটা শুধু একটা ড্রেস না—এটা এখনকার ফ্যাশন ট্রেন্ডের অংশ।",
   colors: {
