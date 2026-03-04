@@ -86,5 +86,6 @@ export type PuckProps = {
     primaryColor?: string;
     textColor?: string;
     backgroundColor?: string;
+    whatsappNumber?: string;
   };
 };

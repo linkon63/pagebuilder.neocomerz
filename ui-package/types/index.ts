@@ -127,6 +127,7 @@ export interface FeaturesProps {
     text?: string;
     background?: string;
   };
+  whatsappNumber?: string;
 }
 
 // Design and Fit Component Props

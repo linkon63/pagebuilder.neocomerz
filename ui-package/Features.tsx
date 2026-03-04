@@ -31,7 +31,8 @@ export default function Features({
         primary: '#F36621',
         text: '#222F28',
         background: '#ffffff'
-    }
+    },
+    whatsappNumber = "+8801907220222"
 }: FeaturesProps) {
     const { primary = '#F36621', text = '#222F28', background = '#ffffff' } = colors;
     const defaultTagline = "এটা শুধু একটা ড্রেস না—এটা এখনকার ফ্যাশন ট্রেন্ডের অংশ।";
@@ -81,7 +82,7 @@ export default function Features({
                                     </div>
                                 </a>
                                 <div className="w-full md:w-auto flex justify-center md:block md:absolute md:left-[90%] md:ml-6">
-                                    <Helpline />
+                                    <Helpline whatsappNumber={whatsappNumber} />
                                 </div>
                             </div>
                             <p className="mt-8 text-white text-xl md:text-3xl font-bold leading-tight md:leading-9 max-w-sm">

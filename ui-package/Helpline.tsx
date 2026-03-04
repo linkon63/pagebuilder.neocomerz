@@ -38,13 +38,18 @@ const WhatsAppIcon = () => (
     </svg>
 );
 
-export default function Helpline() {
+export interface HelplineProps {
+    whatsappNumber?: string;
+}
+
+export default function Helpline({ whatsappNumber = "+8801907220222" }: HelplineProps) {
+    const formattedNumber = whatsappNumber.replace(/[^0-9+]/g, '');
     return (
         <a
-            href="https://wa.me/+8801907220222"
+            href={`https://wa.me/${formattedNumber}`}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="WhatsApp Customer Support: +8801907220222"
+            aria-label={`WhatsApp Customer Support: ${whatsappNumber}`}
             className="block w-fit cursor-pointer rounded-2xl border-2 border-green-500 bg-white px-5 py-1.5 transition-colors duration-200 hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
             <div className="relative flex items-center gap-1 text-green-500">
@@ -58,7 +63,7 @@ export default function Helpline() {
             </div>
 
             <p className="text-2xl font-semibold leading-8 text-green-500">
-                +8801907220222
+                {whatsappNumber}
             </p>
         </a>
     );

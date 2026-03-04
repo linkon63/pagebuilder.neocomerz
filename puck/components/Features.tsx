@@ -42,6 +42,7 @@ export const Features: ComponentConfig<PuckProps["Features"]> = {
         ctaText: { label: "CTA Button Text", type: "text" },
         ctaHref: { label: "CTA Button Link", type: "text" },
         tagline: { label: "Bottom Tagline", type: "text" },
+        whatsappNumber: { label: "WhatsApp Number", type: "text" },
         primaryColor: { label: "Primary Color (Brand)", type: "text" },
         textColor: { label: "Text Color", type: "text" },
         backgroundColor: { label: "Background Color", type: "text" },
@@ -58,6 +59,7 @@ export const Features: ComponentConfig<PuckProps["Features"]> = {
         ctaText: DEFAULT_CTA_TEXT,
         ctaHref: DEFAULT_CTA_HREF,
         tagline: DEFAULT_TAGLINE,
+        whatsappNumber: "+8801907220222",
         backgroundColor: "#ffffff",
     },
     render: (props) => (
@@ -71,6 +73,7 @@ export const Features: ComponentConfig<PuckProps["Features"]> = {
                 href: withFallbackText(props.ctaHref, DEFAULT_CTA_HREF)
             }}
             tagline={withFallbackText(props.tagline, DEFAULT_TAGLINE)}
+            whatsappNumber={props.whatsappNumber}
             colors={{
                 primary: props.primaryColor,
                 text: props.textColor,
