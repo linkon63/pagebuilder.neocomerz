@@ -19,9 +19,9 @@ export default function InlineHero({
     ctaText = 'এখনই অর্ডার করুন',
     ctaHref = '#order',
     theme = {
-        primaryColor: '#27272a',    // zinc-800 equivalent
-        secondaryColor: '#5b21b6',  // violet-800 equivalent
-        textColor: '#27272a',       // zinc-800 equivalent
+        primaryColor: '#27272a',
+        secondaryColor: '#5b21b6',
+        textColor: '#27272a',
     }
 }: InlineHeroProps) {
     const { primaryColor, secondaryColor, textColor } = theme;

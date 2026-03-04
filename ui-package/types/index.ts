@@ -114,8 +114,8 @@ export interface FeatureImage {
 export interface FeaturesProps {
   title: React.ReactNode;
   description: React.ReactNode;
-  features: FeatureItem[];
-  images: FeatureImage[];
+  features?: FeatureItem[];
+  images?: FeatureImage[];
   ctaButton: {
     text: string;
     href: string;

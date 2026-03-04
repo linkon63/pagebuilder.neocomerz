@@ -9,3 +9,4 @@ export * from "./InlineHero";
 export * from "./gallery/GalleryCol";
 export * from "./gallery/GalleryGrid";
 export * from "./gallery/GalleryGrid6";
+export * from "./Features";

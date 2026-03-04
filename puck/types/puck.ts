@@ -75,4 +75,16 @@ export type PuckProps = {
     description?: string;
     images?: { src: string; alt?: string }[];
   };
+  Features: {
+    title?: string;
+    description?: string;
+    features?: { text: string }[];
+    images?: { src: string; alt?: string }[];
+    ctaText?: string;
+    ctaHref?: string;
+    tagline?: string;
+    primaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+  };
 };

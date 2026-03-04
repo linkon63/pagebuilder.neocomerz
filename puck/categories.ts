@@ -12,6 +12,10 @@ export const categories: Config<PuckProps>["categories"] = {
     title: "Hero Components",
     components: ["Hero", "LayeredHero", "InlineHero"],
   },
+  Features: {
+    title: "Feature Components",
+    components: ["Features"],
+  },
   Gallery: {
     title: "Gallery Components",
     components: ["GalleryCol", "GalleryGrid", "GalleryGrid6"],

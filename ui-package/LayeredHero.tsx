@@ -58,7 +58,6 @@ export default function LayeredHero({
   return (
     <section className="relative w-full flex flex-col-reverse lg:flex-row bg-white px-4 m-0 p-0">
 
-      {/* Logo Area (Absolute Top Left) */}
       <div className="hidden xl:block absolute top-8 left-6 lg:left-24 lg:top-6 z-20 mb-20">
         <div className="logo relative w-[230px] h-20">
           {finalLogoSrc && (
@@ -72,7 +71,6 @@ export default function LayeredHero({
         </div>
       </div>
 
-      {/* Decorative Left Shadow */}
       {showShadow && shadowImage && (
         <div className="hidden 2xl:block absolute left-0 top-0 z-10">
           <Image
@@ -84,10 +82,8 @@ export default function LayeredHero({
         </div>
       )}
 
-      {/* Left Section (Content) */}
       <div className="relative w-full lg:w-[60%] flex flex-col xl:mt-10 2xl:pl-[13%] justify-center px-4 sm:px-8 lg:px-24 py-14 overflow-hidden pl-[5%]">
 
-        {/* Background Watermark Text */}
         {showWatermark && watermarkText && (
           <div className="absolute right-46 top-1/2 -translate-y-1/2 translate-x-[35%] pointer-events-none select-none z-0 hidden lg:block">
             <span
@@ -99,11 +95,9 @@ export default function LayeredHero({
           </div>
         )}
 
-        {/* Text Content */}
         <div className="relative z-10 w-full lg:max-w-xl text-center lg:text-left">
           <div className="self-stretch inline-flex flex-col justify-center items-center lg:items-start lg:justify-start gap-6">
 
-            {/* Mobile/Tablet Logo Area */}
             <div className="z-20 block xl:hidden mb-20 lg:mb-16 relative w-[230px] h-[60px]">
               <div className="logo">
                 {finalLogoSrc && (
@@ -135,7 +129,6 @@ export default function LayeredHero({
               </span>
             </div>
 
-            {/* Description */}
             <div
               className="self-stretch justify-start text-base sm:text-lg font-medium font-['Hind_Siliguri'] leading-relaxed"
               style={{ color: descriptionColor }}
@@ -143,7 +136,7 @@ export default function LayeredHero({
               {description}
             </div>
 
-            {/* Pricing Section */}
+
             <p
               className='font-bold text-lg lg:text-2xl'
               style={{ color: textColor }}
@@ -205,12 +198,9 @@ export default function LayeredHero({
         )}
       </div>
 
-      {/* Floating Polaroid Image (Absolute Centered) */}
       {showPolaroid && overlayImage && (
         <div className="hidden 2xl:block absolute top-[65%] lg:top-1/2 left-1/2 lg:left-[60%] transform -translate-x-1/2 -translate-y-1/2 rotate-[-5deg] z-30 w-[280px] sm:w-[320px] lg:w-[380px] shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-transform hover:rotate-0 duration-500 ease-out">
-          {/* Polaroid White Border */}
           <div className="bg-white p-4 pb-16 lg:p-5 lg:pb-20">
-            {/* Inner Image */}
             <div className="w-full h-[350px] lg:h-[450px] overflow-hidden bg-gray-100 relative">
               <Image
                 src={overlayImage}
