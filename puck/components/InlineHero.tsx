@@ -1,9 +1,9 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import Hero3UI from "../../ui-package/Hero3";
+import InlineHeroUI from "../../ui-package/InlineHero";
 
-export const Hero3: ComponentConfig<PuckProps["Hero3"]> = {
+export const InlineHero: ComponentConfig<PuckProps["InlineHero"]> = {
     fields: {
         backgroundImage: {
             label: "Background Image",
@@ -51,7 +51,7 @@ export const Hero3: ComponentConfig<PuckProps["Hero3"]> = {
         textColor: "#27272a",
     },
     render: (props) => (
-        <Hero3UI
+        <InlineHeroUI
             backgroundImage={props.backgroundImage}
             backgroundImageAlt={props.backgroundImageAlt}
             logoSrc={props.logoSrc}

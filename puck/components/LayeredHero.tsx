@@ -66,10 +66,6 @@ export const LayeredHero: ComponentConfig<PuckProps["LayeredHero"]> = {
     showCtaIcon: { label: "Show CTA Icon", type: "radio", options: [{ label: "Yes", value: true }, { label: "No", value: false }] },
   },
   defaultProps: {
-    mainImage: "/ui-package/images/hero-2/hero-main.webp",
-    overlayImage: "/ui-package/images/hero-2/hero-overlay.webp",
-    shadowImage: "/ui-package/images/hero-2/left-shadow.webp",
-    logoSrc: "/ui-package/images/hero-2/Logo.svg",
     logoAlt: "Logo image",
     watermarkText: "Shirt",
     titlePrimary: "এই শীতের",

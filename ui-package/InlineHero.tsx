@@ -1,15 +1,15 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Hero3Props } from './types';
+import { InlineHeroProps } from './types';
 
-import hero3BgDefault from './images/hero-3/hero-bg.webp';
-import hero3LogoDefault from './images/hero-3/Logo.svg';
+import inlineHeroBgDefault from './images/hero-3/hero-bg.webp';
+import inlineHeroLogoDefault from './images/hero-3/Logo.svg';
 
-export default function Hero3({
-    backgroundImage = hero3BgDefault.src,
+export default function InlineHero({
+    backgroundImage = inlineHeroBgDefault.src,
     backgroundImageAlt = 'Pakistani Dress Collection Background',
-    logoSrc = hero3LogoDefault.src,
+    logoSrc = inlineHeroLogoDefault.src,
     logoAlt = 'NeoComerz Logo',
     logoWidth = 200,
     logoHeight = 60,
@@ -23,7 +23,7 @@ export default function Hero3({
         secondaryColor: '#5b21b6',  // violet-800 equivalent
         textColor: '#27272a',       // zinc-800 equivalent
     }
-}: Hero3Props) {
+}: InlineHeroProps) {
     const { primaryColor, secondaryColor, textColor } = theme;
 
     return (

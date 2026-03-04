@@ -44,7 +44,7 @@ export type PuckProps = {
     textColor?: string;
     descriptionColor?: string;
   };
-  Hero3: {
+  InlineHero: {
     backgroundImage?: string;
     backgroundImageAlt?: string;
     logoSrc?: string;

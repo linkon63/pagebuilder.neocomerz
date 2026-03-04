@@ -81,8 +81,8 @@ export interface LayeredHeroProps {
   };
 }
 
-// Hero3 Component Props
-export interface Hero3Props {
+// InlineHero Component Props
+export interface InlineHeroProps {
   backgroundImage?: string;
   backgroundImageAlt?: string;
   logoSrc?: string;

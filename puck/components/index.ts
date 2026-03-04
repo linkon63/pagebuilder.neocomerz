@@ -5,7 +5,7 @@ export * from "./Text";
 export * from "./Button";
 export * from "./Hero";
 export * from "./LayeredHero";
-export * from "./Hero3";
+export * from "./InlineHero";
 export * from "./gallery/GalleryCol";
 export * from "./gallery/GalleryGrid";
 export * from "./gallery/GalleryGrid6";

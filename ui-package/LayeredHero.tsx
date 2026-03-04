@@ -3,20 +3,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { LayeredHeroProps } from "./types";
 
-const LAYERED_HERO_DEFAULT_LOGO = "/ui-package/images/hero-2/Logo.svg";
+import layeredHeroMainDefault from './images/hero-2/hero-main.webp';
+import layeredHeroOverlayDefault from './images/hero-2/hero-overlay.webp';
+import layeredHeroShadowDefault from './images/hero-2/left-shadow.webp';
+import layeredHeroLogoDefault from './images/hero-3/Logo.svg';
 
 export default function LayeredHero({
   logo = {
-    src: LAYERED_HERO_DEFAULT_LOGO,
+    src: layeredHeroLogoDefault.src,
     alt: "Logo image",
     width: 230,
     height: 60,
   },
-  mainImage = "/ui-package/images/hero-2/hero-main.webp",
+  mainImage = layeredHeroMainDefault.src,
   mainImageAlt = "Collection Models",
-  overlayImage = "/ui-package/images/hero-2/hero-overlay.webp",
+  overlayImage = layeredHeroOverlayDefault.src,
   overlayImageAlt = "Featured Product",
-  shadowImage = "/ui-package/images/hero-2/left-shadow.webp",
+  shadowImage = layeredHeroShadowDefault.src,
   shadowImageAlt = "Decorative shadow",
   watermarkText = "Shirt",
   titlePrimary = "এই শীতের",
@@ -46,7 +49,7 @@ export default function LayeredHero({
   const { primaryColor = "#FBBF24", textColor = "#222F28", descriptionColor = "#6B6B6B" } = theme;
 
   const {
-    src: finalLogoSrc = LAYERED_HERO_DEFAULT_LOGO,
+    src: finalLogoSrc = layeredHeroLogoDefault.src,
     alt: finalLogoAlt = "Logo image",
     width: finalLogoWidth = 230,
     height: finalLogoHeight = 60,
