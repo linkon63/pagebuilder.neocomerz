@@ -1,22 +1,22 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Hero2Props } from "./types";
+import { LayeredHeroProps } from "./types";
 
-const HERO2_DEFAULT_LOGO = "/images/tenants/theme/fashion3/jannat.png";
+const LAYERED_HERO_DEFAULT_LOGO = "/ui-package/images/hero-2/Logo.svg";
 
-export default function Hero2({
+export default function LayeredHero({
   logo = {
-    src: HERO2_DEFAULT_LOGO,
+    src: LAYERED_HERO_DEFAULT_LOGO,
     alt: "Logo image",
     width: 230,
     height: 60,
   },
-  mainImage = "/images/tenants/theme/fashion/fashion2/images/hero-section/hero-main.webp",
+  mainImage = "/ui-package/images/hero-2/hero-main.webp",
   mainImageAlt = "Collection Models",
-  overlayImage = "/images/tenants/theme/fashion/fashion2/images/hero-section/hero-overlay.webp",
+  overlayImage = "/ui-package/images/hero-2/hero-overlay.webp",
   overlayImageAlt = "Featured Product",
-  shadowImage = "/images/tenants/theme/fashion/fashion2/images/hero-section/left-shadow.webp",
+  shadowImage = "/ui-package/images/hero-2/left-shadow.webp",
   shadowImageAlt = "Decorative shadow",
   watermarkText = "Shirt",
   titlePrimary = "এই শীতের",
@@ -41,12 +41,12 @@ export default function Hero2({
     textColor: "#222F28",
     descriptionColor: "#6B6B6B",
   },
-}: Hero2Props) {
+}: LayeredHeroProps) {
   const { showWatermark = true, showShadow = true, showPolaroid = true, showCtaIcon = true } = settings;
   const { primaryColor = "#FBBF24", textColor = "#222F28", descriptionColor = "#6B6B6B" } = theme;
 
   const {
-    src: finalLogoSrc = HERO2_DEFAULT_LOGO,
+    src: finalLogoSrc = LAYERED_HERO_DEFAULT_LOGO,
     alt: finalLogoAlt = "Logo image",
     width: finalLogoWidth = 230,
     height: finalLogoHeight = 60,

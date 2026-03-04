@@ -19,7 +19,7 @@ export type PuckProps = {
     contentAlignment?: 'left' | 'center' | 'right';
     primaryColor?: string; textColor?: string;
   };
-  Hero2: {
+  LayeredHero: {
     mainImage?: string;
     mainImageAlt?: string;
     overlayImage?: string;
@@ -43,6 +43,22 @@ export type PuckProps = {
     primaryColor?: string;
     textColor?: string;
     descriptionColor?: string;
+  };
+  Hero3: {
+    backgroundImage?: string;
+    backgroundImageAlt?: string;
+    logoSrc?: string;
+    logoAlt?: string;
+    logoWidth?: number;
+    logoHeight?: number;
+    titlePrimary?: string;
+    titleSecondary?: string;
+    description?: string;
+    ctaText?: string;
+    ctaHref?: string;
+    primaryColor?: string;
+    secondaryColor?: string;
+    textColor?: string;
   };
   GalleryCol: {
     title?: string;

@@ -36,8 +36,8 @@ export interface HeroProps {
   };
 }
 
-// Hero2 Component Props
-export interface Hero2Props {
+// LayeredHero Component Props
+export interface LayeredHeroProps {
   logo?: {
     src?: string;
     alt?: string;
@@ -78,6 +78,26 @@ export interface Hero2Props {
     primaryColor?: string;
     textColor?: string;
     descriptionColor?: string;
+  };
+}
+
+// Hero3 Component Props
+export interface Hero3Props {
+  backgroundImage?: string;
+  backgroundImageAlt?: string;
+  logoSrc?: string;
+  logoAlt?: string;
+  logoWidth?: number;
+  logoHeight?: number;
+  titlePrimary?: string;
+  titleSecondary?: string;
+  description?: string;
+  ctaText?: string;
+  ctaHref?: string;
+  theme?: {
+    primaryColor?: string; // e.g., for titles
+    secondaryColor?: string; // e.g., for secondary titles, cta bg
+    textColor?: string; // e.g., for descriptions
   };
 }
 

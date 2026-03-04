@@ -1,9 +1,10 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import Hero2UI from "../../ui-package/Hero2";
+import LayeredHeroUI from "../../ui-package/LayeredHero";
 
-export const Hero2: ComponentConfig<PuckProps["Hero2"]> = {
+export const LayeredHero: ComponentConfig<PuckProps["LayeredHero"]> = {
+  label: "Layered Hero",
   fields: {
     mainImage: {
       label: "Main Hero Image",
@@ -68,7 +69,7 @@ export const Hero2: ComponentConfig<PuckProps["Hero2"]> = {
     mainImage: "/ui-package/images/hero-2/hero-main.webp",
     overlayImage: "/ui-package/images/hero-2/hero-overlay.webp",
     shadowImage: "/ui-package/images/hero-2/left-shadow.webp",
-    logoSrc: "/ui-package/images/hero-2/jannat.png",
+    logoSrc: "/ui-package/images/hero-2/Logo.svg",
     logoAlt: "Logo image",
     watermarkText: "Shirt",
     titlePrimary: "এই শীতের",
@@ -89,7 +90,7 @@ export const Hero2: ComponentConfig<PuckProps["Hero2"]> = {
     showCtaIcon: true,
   },
   render: (props) => (
-    <Hero2UI
+    <LayeredHeroUI
       mainImage={props.mainImage}
       overlayImage={props.overlayImage}
       shadowImage={props.shadowImage}
