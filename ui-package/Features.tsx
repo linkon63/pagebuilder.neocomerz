@@ -11,39 +11,38 @@ import feature3Default from './images/feature-1/feature-3.webp';
 import feature4Default from './images/feature-1/feature-4.webp';
 
 const defaultImages = [
-    { src: feature1Default.src, alt: 'Model in a yellow traditional dress' },
-    { src: feature2Default.src, alt: 'Model in a pink traditional dress' },
-    { src: feature3Default.src, alt: 'Model in a green traditional dress' },
-    { src: feature4Default.src, alt: 'Back view of a model in a green traditional dress' },
+  { src: feature1Default.src, alt: 'Model in a yellow traditional dress' },
+  { src: feature2Default.src, alt: 'Model in a pink traditional dress' },
+  { src: feature3Default.src, alt: 'Model in a green traditional dress' },
+  { src: feature4Default.src, alt: 'Back view of a model in a green traditional dress' },
 ];
 
 export default function Features({
-    title,
-    description,
-    features = [],
-    images = defaultImages,
-    ctaButton = {
-        text: "এখনই অর্ডার করুন",
-        href: "#order-form"
-    },
-    tagline = "এটা শুধু একটা ড্রেস না—এটা এখনকার ফ্যাশন ট্রেন্ডের অংশ।",
-    colors = {
-        primary: '#F36621',
-        text: '#222F28',
-        background: '#ffffff'
-    },
-    whatsappNumber = "+8801907220222"
+  title,
+  description,
+  features = [],
+  images = defaultImages,
+  ctaButton = {
+    text: "এখনই অর্ডার করুন",
+    href: "#order-form"
+  },
+  tagline = "এটা শুধু একটা ড্রেস না—এটা এখনকার ফ্যাশন ট্রেন্ডের অংশ।",
+  colors = {
+    primary: '#F36621',
+    text: '#222F28',
+    background: '#ffffff'
+  },
+  whatsappNumber = "+880 1712-508063"
 }: FeaturesProps) {
-    const { primary = '#F36621', text = '#222F28', background = '#ffffff' } = colors;
-    const defaultTagline = "এটা শুধু একটা ড্রেস না—এটা এখনকার ফ্যাশন ট্রেন্ডের অংশ।";
+  const { primary = '#F36621', text = '#222F28', background = '#ffffff' } = colors;
+  const defaultTagline = "এটা শুধু একটা ড্রেস না—এটা এখনকার ফ্যাশন ট্রেন্ডের অংশ।";
 
-    // Default content with highlights
-    const defaultTitle = <>কেন এটা <span style={{ color: primary }}>আলাদা করে</span> নজর কাড়ে</>;
-    const defaultDescription = <>শুধু সুন্দর নয়, আরামদায়কও। আমাদের প্রিমিয়াম কোয়ালিটির Quality Panjabi সেট <span className="font-semibold" style={{ color: primary }}>আপনাকে দেবে এক অনন্য অভিজ্ঞতা।</span> প্রতিটি স্টিচে রয়েছে আমাদের নিখুঁত কারুকার্য।</>;
+  const defaultTitle = <>কেন <span style={{ color: primary }}>আলাদা করে</span> নজর কাড়ে</>;
+  const defaultDescription = <>শুধু সুন্দর নয়, আরামদায়কও। আমাদের <span className="font-semibold" style={{ color: primary }}>প্রিমিয়াম কোয়ালিটির</span> Quality Panjabi সেট <span className="font-semibold" style={{ color: primary }}>আপনাকে দেবে এক অনন্য অভিজ্ঞতা।</span> প্রতিটি স্টিচে রয়েছে আমাদের নিখুঁত কারুকার্য।</>;
 
-    const displayTitle = title === "কেন এটা আলাদা করে নজর কাড়ে" ? defaultTitle : title;
-    const displayDescription = description === "শুধু সুন্দর নয়, আরামদায়কও। আমাদের প্রিমিয়াম কোয়ালিটির Quality Panjabi সেট আপনাকে দেবে এক অনন্য অভিজ্ঞতা। প্রতিটি স্টিচে রয়েছে আমাদের নিখুঁত কারুকার্য।" ? defaultDescription : description;
-    const displayTagline = typeof tagline === 'string' && tagline.trim().length > 0 ? tagline : defaultTagline;
+  const displayTitle = title === "কেন এটা আলাদা করে নজর কাড়ে" ? defaultTitle : title;
+  const displayDescription = description === "শুধু সুন্দর নয়, আরামদায়কও। আমাদের প্রিমিয়াম কোয়ালিটির Quality Panjabi সেট আপনাকে দেবে এক অনন্য অভিজ্ঞতা। প্রতিটি স্টিচে রয়েছে আমাদের নিখুঁত কারুকার্য।" ? defaultDescription : description;
+  const displayTagline = typeof tagline === 'string' && tagline.trim().length > 0 ? tagline : defaultTagline;
 
     return (
         <section className="bg-white py-12 md:py-24" style={{ backgroundColor: background }}>

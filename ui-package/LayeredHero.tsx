@@ -22,7 +22,7 @@ export default function LayeredHero({
   shadowImage = layeredHeroShadowDefault.src,
   shadowImageAlt = "Decorative shadow",
   watermarkText = "Shirt",
-  titlePrimary = "এই শীতের",
+  titlePrimary = "🌟 এই শীতের",
   titleSecondary = "স্টাইল গেমে আনুন নতুনত্ব",
   description = "শীত এলেই শুরু হয় স্টাইলের নতুন অধ্যায়। এত কম দামে প্রিমিয়াম কোয়ালিটি Sweatshirt and Pant। এই শীতের স্টাইল গেমে আনুন নতুনত্ব। বাজেট ফ্রেন্ডলি প্রাইসে পাচ্ছেন আমাদের এক্সক্লুসিভ প্রিমিয়াম Sweatshirt Collection - যা আপনার লুককে করবে আরো স্টাইলিশ ও আকর্ষনীয়।",
   productName = "Sweat Shirt Set",

@@ -88,4 +88,66 @@ export type PuckProps = {
     backgroundColor?: string;
     whatsappNumber?: string;
   };
+  DesignAndFit: {
+    title?: string;
+    subtitle?: string;
+    imageCards?: { 
+      image?: string; 
+      title?: string; 
+      description?: string; 
+      alt?: string;
+    }[];
+    detailCards?: {
+      title?: string;
+      items?: { text: string }[];
+    }[];
+    ctaText?: string;
+    ctaHref?: string;
+    primaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+  };
+  SizeChart: {
+    title?: string;
+    description?: string;
+    sizeData?: {
+      measurement?: string;
+      description?: string;
+      m?: string;
+      l?: string;
+      xl?: string;
+      xxl?: string;
+    }[];
+    chartImage?: string;
+    chartImageAlt?: string;
+    whatsappText?: string;
+    whatsappNumber?: string;
+    contactText?: string;
+    returnPolicy?: string;
+    primaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+  };
+  OrderForm: {
+    title?: string;
+    description?: string;
+    submitButtonText?: string;
+    productImage?: string;
+    productImageAlt?: string;
+    productName?: string;
+    productPrice?: string;
+    shippingOptions?: {
+      id?: string;
+      label?: string;
+      price?: number;
+    }[];
+    namePlaceholder?: string;
+    phonePlaceholder?: string;
+    addressPlaceholder?: string;
+    notesPlaceholder?: string;
+    cashOnDeliveryText?: string;
+    primaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+  };
 };

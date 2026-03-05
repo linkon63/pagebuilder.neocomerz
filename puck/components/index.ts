@@ -10,3 +10,6 @@ export * from "./gallery/GalleryCol";
 export * from "./gallery/GalleryGrid";
 export * from "./gallery/GalleryGrid6";
 export * from "./Features";
+export * from "./DesignAndFit";
+export * from "./SizeChart";
+export * from "./OrderForm";

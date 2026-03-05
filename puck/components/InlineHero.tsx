@@ -1,7 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import InlineHeroUI from "../../ui-package/InlineHero";
+import InlineHeroUI from "@/ui-package/InlineHero";
 
 export const InlineHero: ComponentConfig<PuckProps["InlineHero"]> = {
     fields: {

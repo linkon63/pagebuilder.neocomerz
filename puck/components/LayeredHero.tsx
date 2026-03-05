@@ -1,7 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import LayeredHeroUI from "../../ui-package/LayeredHero";
+import LayeredHeroUI from "@/ui-package/LayeredHero";
 
 export const LayeredHero: ComponentConfig<PuckProps["LayeredHero"]> = {
   label: "Layered Hero",

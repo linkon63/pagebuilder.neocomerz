@@ -2,22 +2,35 @@ import { Config } from "@puckeditor/core";
 import { PuckProps } from "./types/puck";
 
 export const categories: Config<PuckProps>["categories"] = {
-  Layout: {
+  LAYOUT: {
     components: ["Container", "Columns"],
   },
-  Basic: {
+
+  CONTENT: {
     components: ["Heading", "Text", "Button"],
   },
-  Prebuilt: {
-    title: "Hero Components",
+
+  HERO: {
     components: ["Hero", "LayeredHero", "InlineHero"],
   },
-  Features: {
-    title: "Feature Components",
+
+  FEATURES: {
     components: ["Features"],
   },
-  Gallery: {
-    title: "Gallery Components",
+
+  QUALITY: {
+    components: ["DesignAndFit"],
+  },
+  
+  GALLERY: {
     components: ["GalleryCol", "GalleryGrid", "GalleryGrid6"],
+  },
+
+  SIZING: {
+    components: ["SizeChart"],
+  },
+
+  COMMERCE: {
+    components: ["OrderForm"],
   },
 };

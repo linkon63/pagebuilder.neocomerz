@@ -42,7 +42,7 @@ export interface HelplineProps {
     whatsappNumber?: string;
 }
 
-export default function Helpline({ whatsappNumber = "+8801907220222" }: HelplineProps) {
+export default function Helpline({ whatsappNumber = "+880 1712-508063" }: HelplineProps) {
     const formattedNumber = whatsappNumber.replace(/[^0-9+]/g, '');
     return (
         <a
