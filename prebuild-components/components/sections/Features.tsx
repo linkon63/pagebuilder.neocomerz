@@ -7,8 +7,8 @@ import SectionHeader from '../ui/SectionHeader';
 export default function Features({
   title,
   description,
-  features,
-  images,
+  features = [],
+  images = [],
   ctaButton,
   tagline,
   colors = {
@@ -40,8 +40,8 @@ export default function Features({
 
             <div className="rounded-2xl md:rounded-[32px] p-6 md:p-8 self-start w-full md:w-[376px]" style={{ backgroundColor: colors.primary }}>
               <div className="flex flex-col md:flex-row items-center gap-6 md:gap-0 relative">
-                <PrimaryButton 
-                  href={ctaButton.href} 
+                <PrimaryButton
+                  href={ctaButton.href}
                   icon={ctaButton.icon}
                   variant="secondary"
                 >
@@ -57,10 +57,10 @@ export default function Features({
           <div className="grid grid-cols-2 gap-4">
             {images.map((image, index) => (
               <div key={index} className="relative aspect-w-1 aspect-h-1 group overflow-hidden rounded-2xl">
-                <img 
-                  className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-300 ease-in-out" 
-                  src={image.src} 
-                  alt={image.alt} 
+                <img
+                  className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                  src={image.src}
+                  alt={image.alt}
                 />
               </div>
             ))}

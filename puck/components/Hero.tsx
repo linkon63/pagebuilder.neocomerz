@@ -1,47 +1,40 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import HeroUI from "../../ui-package/Hero";
+import HeroUI from "@/ui-package/Hero";
 
 export const Hero: ComponentConfig<PuckProps["Hero"]> = {
   fields: {
-    backgroundImage: { 
-      label: "Background Image",
+    backgroundImage: {
       type: "custom",
+      label: "BACKGROUND IMAGE",
       render: ({ value, onChange }) => (
-        <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Background Image</label>
-          <ImageUpload value={value} onChange={onChange} />
-        </div>
+        <ImageUpload value={value} onChange={onChange} />
       )
     },
-    logoSrc: { 
-      label: "Logo Image",
+    logoSrc: {
       type: "custom",
+      label: "LOGO SRC",
       render: ({ value, onChange }) => (
-        <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Logo Image</label>
-          <ImageUpload value={value} onChange={onChange} />
-        </div>
+        <ImageUpload value={value} onChange={onChange} />
       )
     },
-    logoAlt: { label: "Logo Alt Text", type: "text" },
-    logoWidth: { label: "Logo Width (px)", type: "number" },
-    logoHeight: { label: "Logo Height (px)", type: "number" },
-    title: { label: "Hero Title", type: "text" },
-    titleSize: { label: "Title Font Size (e.g. 5rem)", type: "text" },
-    subtitle: { label: "Hero Subtitle", type: "text" },
-    subtitleSize: { label: "Subtitle Font Size (e.g. 3rem)", type: "text" },
-    discountTag: { label: "Discount Tagline", type: "text" },
-    discountTagSize: { label: "Discount Font Size (e.g. 4.5rem)", type: "text" },
-    ctaText: { label: "Main CTA Text", type: "text" },
-    ctaHref: { label: "Main CTA Link", type: "text" },
-    secondaryCtaText: { label: "Secondary CTA Text", type: "text" },
-    secondaryCtaHref: { label: "Secondary CTA Link", type: "text" },
-    overlayOpacity: { label: "Overlay Opacity (0-100)", type: "number" },
-    overlayColor: { label: "Overlay Color", type: "text" },
+    logoAlt: { type: "text", label: "LOGO ALT" },
+    logoWidth: { type: "number", label: "LOGO WIDTH" },
+    logoHeight: { type: "number", label: "LOGO HEIGHT" },
+    title: { type: "text", label: "TITLE" },
+    titleSize: { type: "text", label: "TITLE SIZE" },
+    subtitle: { type: "text", label: "SUBTITLE" },
+    subtitleSize: { type: "text", label: "SUBTITLE SIZE" },
+    discountTag: { type: "text", label: "DISCOUNT TAG" },
+    discountTagSize: { type: "text", label: "DISCOUNT TAG SIZE" },
+    ctaText: { type: "text", label: "CTA TEXT" },
+    ctaHref: { type: "text", label: "CTA HREF" },
+    secondaryCtaText: { type: "text", label: "SECONDARY CTA TEXT" },
+    secondaryCtaHref: { type: "text", label: "SECONDARY CTA HREF" },
+    overlayOpacity: { type: "number", label: "OVERLAY OPACITY" },
+    overlayColor: { type: "text", label: "OVERLAY COLOR" },
     textAlignment: {
-      label: "Text Alignment",
       type: "radio",
       options: [
         { label: "Left", value: "left" },
@@ -50,7 +43,6 @@ export const Hero: ComponentConfig<PuckProps["Hero"]> = {
       ],
     },
     contentAlignment: {
-      label: "Box Alignment (Desktop)",
       type: "radio",
       options: [
         { label: "Left", value: "left" },
@@ -58,8 +50,8 @@ export const Hero: ComponentConfig<PuckProps["Hero"]> = {
         { label: "Right", value: "right" },
       ],
     },
-    primaryColor: { label: "Primary Theme Color", type: "text" },
-    textColor: { label: "Text Theme Color", type: "text" },
+    primaryColor: { type: "text" },
+    textColor: { type: "text" },
   },
   defaultProps: {
     title: "STYLISH & COMFORTABLE",
@@ -77,39 +69,5 @@ export const Hero: ComponentConfig<PuckProps["Hero"]> = {
     primaryColor: "#F36621",
     textColor: "#222F28",
   },
-  render: (props) => (
-    <HeroUI
-      backgroundImage={props.backgroundImage}
-      logo={{
-        src: props.logoSrc,
-        alt: props.logoAlt,
-        width: props.logoWidth,
-        height: props.logoHeight,
-      }}
-      title={props.title}
-      titleSize={props.titleSize}
-      subtitle={props.subtitle}
-      subtitleSize={props.subtitleSize}
-      discountTag={props.discountTag}
-      discountTagSize={props.discountTagSize}
-      cta={{
-        text: props.ctaText,
-        href: props.ctaHref,
-      }}
-      secondaryCta={{
-        text: props.secondaryCtaText,
-        href: props.secondaryCtaHref,
-      }}
-      settings={{
-        overlayOpacity: props.overlayOpacity,
-        overlayColor: props.overlayColor,
-        textAlignment: props.textAlignment,
-        contentAlignment: props.contentAlignment,
-      }}
-      theme={{
-        primaryColor: props.primaryColor,
-        textColor: props.textColor,
-      }}
-    />
-  ),
+  render: (props) => <HeroUI {...props} />,
 };

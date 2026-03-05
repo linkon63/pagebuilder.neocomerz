@@ -36,6 +36,71 @@ export interface HeroProps {
   };
 }
 
+// LayeredHero Component Props
+export interface LayeredHeroProps {
+  logo?: {
+    src?: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+  };
+  mainImage?: string;
+  mainImageAlt?: string;
+  overlayImage?: string;
+  overlayImageAlt?: string;
+  shadowImage?: string;
+  shadowImageAlt?: string;
+  watermarkText?: string;
+  titlePrimary?: string;
+  titleSecondary?: string;
+  description?: string;
+  productName?: string;
+  originalPrice?: string;
+  discountPrice?: string;
+  priceSuffix?: string;
+  cta?: {
+    text?: string;
+    href?: string;
+    icon?: React.ReactNode;
+  };
+  secondaryCta?: {
+    text?: string;
+    href?: string;
+    icon?: React.ReactNode;
+  };
+  settings?: {
+    showWatermark?: boolean;
+    showShadow?: boolean;
+    showPolaroid?: boolean;
+    showCtaIcon?: boolean;
+  };
+  theme?: {
+    primaryColor?: string;
+    textColor?: string;
+    descriptionColor?: string;
+  };
+}
+
+// InlineHero Component Props
+export interface InlineHeroProps {
+  backgroundImage?: string;
+  backgroundImageAlt?: string;
+  logoSrc?: string;
+  logoAlt?: string;
+  logoWidth?: number;
+  logoHeight?: number;
+  titlePrimary?: string;
+  titleSecondary?: string;
+  description?: string;
+  ctaText?: string;
+  ctaHref?: string;
+  theme?: {
+    primaryColor?: string; // e.g., for titles
+    secondaryColor?: string; // e.g., for secondary titles, cta bg
+    textColor?: string; // e.g., for descriptions
+  };
+}
+
 // Features Component Props
 export interface FeatureItem {
   text: string;
@@ -49,8 +114,8 @@ export interface FeatureImage {
 export interface FeaturesProps {
   title: React.ReactNode;
   description: React.ReactNode;
-  features: FeatureItem[];
-  images: FeatureImage[];
+  features?: FeatureItem[];
+  images?: FeatureImage[];
   ctaButton: {
     text: string;
     href: string;
@@ -62,6 +127,7 @@ export interface FeaturesProps {
     text?: string;
     background?: string;
   };
+  whatsappNumber?: string;
 }
 
 // Design and Fit Component Props
