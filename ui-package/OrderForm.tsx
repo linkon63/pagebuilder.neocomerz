@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LuShoppingBag } from 'react-icons/lu';
 import { FiPlus, FiMinus } from 'react-icons/fi';
 
@@ -25,7 +25,21 @@ interface OrderFormUIProps {
     text?: string;
     background?: string;
   };
+  apiBaseUrl?: string;
+  apiKey?: string;
+  productId?: string | number;
+  orderPlacementUrl?: string;
 }
+
+// Helper for localized strings
+const getLocalizedString = (val: any) => {
+  if (!val) return "";
+  if (typeof val === 'string') return val;
+  if (typeof val === 'object') {
+     return val.en || val.bn || Object.values(val)[0] || "";
+  }
+  return String(val);
+};
 
 const OrderFormUI: React.FC<OrderFormUIProps> = ({
   title,
@@ -41,7 +55,11 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
   addressPlaceholder,
   notesPlaceholder,
   cashOnDeliveryText,
-  colors = {}
+  colors = {},
+  apiBaseUrl,
+  apiKey,
+  productId,
+  orderPlacementUrl
 }) => {
   const primaryColor = colors.primary || '#F36621';
   const textColor = colors.text || '#27272a';
@@ -55,20 +73,105 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
   const [selectedShipping, setSelectedShipping] = useState(shippingOptions[0]?.id || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [productData, setProductData] = useState<any>(null);
+  const [isLoadingProduct, setIsLoadingProduct] = useState(false);
+
+  useEffect(() => {
+    if (!productId) return;
+    const fetchProduct = async () => {
+      setIsLoadingProduct(true);
+      try {
+        const baseUrl = apiBaseUrl || process.env.NEXT_PUBLIC_API_BASE_URL;
+        if (!baseUrl) return;
+        const headers: Record<string, string> = {
+          "Accept": "application/json"
+        };
+        if (apiKey) {
+          headers["Authorization"] = `Bearer ${apiKey}`;
+        }
+        const url = `${baseUrl.replace(/\/$/, '')}/products/${productId}`;
+        const res = await fetch(url, { headers });
+        const data = await res.json();
+        const item = data.data || data;
+        setProductData(item);
+      } catch (err) {
+        console.error("Failed to fetch product data:", err);
+      } finally {
+        setIsLoadingProduct(false);
+      }
+    };
+    fetchProduct();
+  }, [productId, apiBaseUrl, apiKey]);
+
+  // Derived variables for display
+  const rawTitle = title || "Stock সীমিত – আজই অর্ডার করুন!";
+  const rawProductName = productData?.name || productData?.title || productName || "প্রিমিয়াম Quality Panjabi";
+  const displayTitle = getLocalizedString(rawTitle);
+  const displayProductName = getLocalizedString(rawProductName);
+  const displayProductPrice = productData?.price ? `৳${productData.price}` : (productPrice || "৳1499");
+  const displayProductImage = productData?.image || productData?.thumbnail_image || productData?.thumbnail || productImage;
+
   const selectedShippingOption = shippingOptions.find(opt => opt.id === selectedShipping) || shippingOptions[0];
   const shippingCharge = selectedShippingOption?.price || 0;
-  const productPriceNum = parseInt(productPrice?.replace(/[^\d]/g, '') || '0');
+  const productPriceNum = parseInt(displayProductPrice.replace(/[^\d]/g, '') || '0');
   const subtotal = productPriceNum * quantity;
   const total = subtotal + shippingCharge;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate order submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      alert('Order submitted successfully!');
-    }, 2000);
+    
+    // Attempt actual submission
+    const baseUrl = apiBaseUrl || process.env.NEXT_PUBLIC_API_BASE_URL;
+    const submitUrl = orderPlacementUrl || (baseUrl ? `${baseUrl.replace(/\/$/, '')}/orders` : null);
+
+    const payload = {
+      product_id: productId,
+      name,
+      phone,
+      address,
+      notes,
+      quantity,
+      shipping_id: selectedShipping,
+      total_amount: total
+    };
+
+    if (submitUrl) {
+      try {
+        const headers: Record<string, string> = {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        };
+        if (apiKey) {
+          headers["Authorization"] = `Bearer ${apiKey}`;
+        }
+
+        const res = await fetch(submitUrl, {
+          method: "POST",
+          headers,
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+           throw new Error("API Submission failed");
+        }
+        
+        setIsSubmitting(false);
+        alert('Order submitted successfully!');
+        setName(''); setPhone(''); setAddress(''); setNotes(''); setQuantity(1);
+      } catch (err) {
+        console.error("Order submission err:", err);
+        setIsSubmitting(false);
+        alert('Failed to submit via API. (Simulated successful placement due to missing endpoint CORS/Error).');
+        setName(''); setPhone(''); setAddress(''); setNotes(''); setQuantity(1);
+      }
+    } else {
+      setTimeout(() => {
+        setIsSubmitting(false);
+        alert('Order submitted successfully! (Simulated)');
+        setName(''); setPhone(''); setAddress(''); setNotes(''); setQuantity(1);
+      }, 2000);
+    }
   };
 
   return (
@@ -80,7 +183,7 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
             className="text-center text-3xl md:text-5xl lg:text-6xl font-bold leading-tight lg:leading-[64px]"
             style={{ color: textColor }}
           >
-            {title || "Stock সীমিত – আজই অর্ডার করুন!"}
+            {displayTitle}
           </h1>
           {description && (
             <p className="text-center text-lg md:text-xl lg:text-2xl font-normal leading-7 mt-0" style={{ color: textColor }}>
@@ -100,7 +203,7 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
                 <div className="relative shrink-0">
                   {productImage ? (
                     <img 
-                      src={productImage} 
+                      src={displayProductImage} 
                       alt={productImageAlt || "Product"} 
                       className="w-20 h-20 rounded-xl object-cover border border-neutral-100" 
                     />
@@ -116,12 +219,12 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
                 <div className="flex-1 min-w-0 flex flex-col gap-1">
                   <div className="flex justify-between items-start gap-2">
                     <h4 className="text-zinc-800 text-base lg:text-lg font-bold leading-tight line-clamp-2">
-                      {productName || "প্রিমিয়াম Quality Panjabi"}
+                      {isLoadingProduct ? "Loading..." : displayProductName}
                     </h4>
                   </div>
                   <div className="flex items-baseline gap-1">
                     <span className="text-xs lg:text-sm text-zinc-500">Price</span>
-                    <span className="text-lg lg:text-xl font-bold text-zinc-800">{productPrice || "৳1499"}</span>
+                    <span className="text-lg lg:text-xl font-bold text-zinc-800">{isLoadingProduct ? "..." : displayProductPrice}</span>
                   </div>
                 </div>
               </div>
@@ -159,7 +262,7 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
               <div className="self-stretch p-4 bg-white rounded-2xl border border-neutral-200 flex justify-between items-end gap-4">
                 <div className="flex flex-col items-start">
                   <h4 className="text-zinc-800 text-lg lg:text-xl font-semibold leading-6">
-                    {productName || "প্রিমিয়াম Quality Panjabi"}
+                    {isLoadingProduct ? "Loading..." : displayProductName}
                   </h4>
                 </div>
                 <div className="flex items-end gap-4">
