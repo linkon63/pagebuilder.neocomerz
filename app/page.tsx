@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense, useMemo } from "react";
 import { Puck, Plugin, usePuck } from "@puckeditor/core";
 import "@puckeditor/core/dist/index.css";
+import "../styles/puck-overrides.css";
 import { config } from "../puck.config";
 import { fetchProducts, type Product } from "@/lib/api";
 import { Package, Search, X, Copy, Check } from "lucide-react";
