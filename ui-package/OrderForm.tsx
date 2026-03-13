@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import OrderFormProductList from './OrderFormProductList';
 import OrderFormCartSummary from './OrderFormCartSummary';
 import OrderFormBillingFields from './OrderFormBillingFields';
-import { getLocalizedString, getVariantDisplayValues } from './OrderFormHelpers';
+import { getLocalizedString, getSizesArray, getVariantDisplayValues } from './OrderFormHelpers';
 
 interface OrderFormUIProps {
   title?: string;
@@ -22,6 +22,7 @@ interface OrderFormUIProps {
   addressPlaceholder?: string;
   notesPlaceholder?: string;
   cashOnDeliveryText?: string;
+  privacyPolicyUrl?: string;
   colors?: {
     primary?: string;
     text?: string;
@@ -31,6 +32,7 @@ interface OrderFormUIProps {
   apiKey?: string;
   productId?: string | number;
   orderPlacementUrl?: string;
+  maxVariantsToShow?: number;
   maxProductsToShow?: number;
 }
 
@@ -48,11 +50,13 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
   addressPlaceholder,
   notesPlaceholder,
   cashOnDeliveryText,
+  privacyPolicyUrl,
   colors = {},
   apiBaseUrl,
   apiKey,
   productId,
   orderPlacementUrl,
+  maxVariantsToShow,
   maxProductsToShow
 }) => {
   const primaryColor = colors.primary || '#F36621';
@@ -69,9 +73,11 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
 
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [isLoadingProduct, setIsLoadingProduct] = useState(false);
-  const [selectedProductId, setSelectedProductId] = useState<string | number>(productId || '');
   const [selectedVariantId, setSelectedVariantId] = useState<string | number>('');
   const [selectedSize, setSelectedSize] = useState<string>('');
+
+  // Backward-compatible fallback for previously saved content.
+  const effectiveMaxVariantsToShow = maxVariantsToShow ?? maxProductsToShow;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -82,17 +88,15 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
         const headers: Record<string, string> = { "Accept": "application/json" };
         if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
 
-        const url = `${baseUrl.replace(/\/$/, '')}/products`;
+        const endpoint = productId
+          ? `${baseUrl.replace(/\/$/, '')}/products/${productId}`
+          : `${baseUrl.replace(/\/$/, '')}/products`;
+        const url = endpoint;
         const res = await fetch(url, { headers });
         const data = await res.json();
-        const items = Array.isArray(data) ? data : (data.data || data.products || []);
+        const payload = data?.data ?? data?.product ?? data;
+        const items = Array.isArray(payload) ? payload : (payload ? [payload] : []);
         setAllProducts(items);
-
-        if (productId && items.length > 0) {
-          setSelectedProductId(productId);
-        } else if (items.length > 0 && !selectedProductId) {
-          setSelectedProductId(items[0].id);
-        }
       } catch (err) {
         console.warn("Products API failed:", err);
       } finally {
@@ -102,21 +106,28 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
     fetchProducts();
   }, [apiBaseUrl, apiKey, productId]);
 
+  const effectiveProductId = productId ?? allProducts[0]?.id ?? '';
+  const productData = allProducts.find(p => String(p.id) === String(effectiveProductId)) || allProducts[0];
+  const variants = productData?.variants || productData?.attributes || [];
+
   useEffect(() => {
-    const currentProduct = allProducts.find(p => String(p.id) === String(selectedProductId)) || allProducts[0];
-    const currentVariants = currentProduct?.variants || currentProduct?.attributes || [];
-    if (currentVariants.length > 0) {
-      if (!currentVariants.find((v: any) => String(v.id) === String(selectedVariantId))) {
-        setSelectedVariantId(currentVariants[0].id);
+    if (variants.length > 0) {
+      if (!variants.find((v: any) => String(v.id) === String(selectedVariantId))) {
+        setSelectedVariantId(variants[0].id);
       }
     } else {
       setSelectedVariantId('');
     }
-  }, [selectedProductId, allProducts, selectedVariantId]);
+  }, [variants, selectedVariantId]);
 
-  const productData = allProducts.find(p => String(p.id) === String(selectedProductId)) || allProducts[0];
-  const variants = productData?.variants || productData?.attributes || [];
   const selectedVariantData = variants.find((v: any) => String(v.id) === String(selectedVariantId)) || variants[0];
+
+  useEffect(() => {
+    const availableSizes = getSizesArray(selectedVariantData?.sizes || productData?.sizes);
+    if (selectedSize && !availableSizes.includes(selectedSize)) {
+      setSelectedSize('');
+    }
+  }, [selectedVariantData, productData, selectedSize]);
 
   const rawTitle = title || "Stock সীমিত – আজই অর্ডার করুন!";
   const rawProductName = productData?.name || productData?.title || productName || "প্রিমিয়াম Quality Panjabi";
@@ -125,10 +136,11 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
   const { value: globalVariantValue } = getVariantDisplayValues(selectedVariantData);
   const displayProductName = getLocalizedString(rawProductName) + (globalVariantValue ? ` - ${globalVariantValue}` : "");
   
-  const variantPrice = selectedVariantData?.price || selectedVariantData?.current_pricing?.unit_price || selectedVariantData?.current_pricing?.retail_price;
-  const basePrice = productData?.price || productData?.current_pricing?.unit_price || productData?.current_pricing?.retail_price;
-  const finalPrice = variantPrice || basePrice;
-  const displayProductPrice = finalPrice ? (String(finalPrice).includes('৳') ? String(finalPrice) : `৳${finalPrice}`) : (productPrice || "৳1499");
+  const variantPrice = selectedVariantData?.price ?? selectedVariantData?.current_pricing?.unit_price ?? selectedVariantData?.current_pricing?.retail_price;
+  const basePrice = productData?.price ?? productData?.current_pricing?.unit_price ?? productData?.current_pricing?.retail_price;
+  const finalPrice = variantPrice ?? basePrice;
+  const hasFinalPrice = finalPrice !== null && finalPrice !== undefined && String(finalPrice).trim() !== '';
+  const displayProductPrice = hasFinalPrice ? (String(finalPrice).includes('৳') ? String(finalPrice) : `৳${finalPrice}`) : (productPrice || "৳1499");
   
   const displayProductImage = selectedVariantData?.image || selectedVariantData?.thumbnail || productData?.image || productData?.thumbnail_image || productData?.thumbnail || productData?.thumbnail_url || productImage;
 
@@ -145,7 +157,7 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
     const submitUrl = orderPlacementUrl || (baseUrl ? `${baseUrl.replace(/\/$/, '')}/orders` : null);
 
     const payload = {
-      product_id: selectedProductId,
+      product_id: effectiveProductId,
       variant_id: selectedVariantId || undefined,
       size: selectedSize || undefined,
       name, phone, address, notes, quantity,
@@ -195,7 +207,7 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
             isLoadingProduct={isLoadingProduct}
             productData={productData}
             variants={variants}
-            maxProductsToShow={maxProductsToShow}
+            maxVariantsToShow={effectiveMaxVariantsToShow}
             selectedVariantId={selectedVariantId}
             setSelectedVariantId={setSelectedVariantId}
             selectedSize={selectedSize}
@@ -229,6 +241,7 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
             addressPlaceholder={addressPlaceholder}
             notesPlaceholder={notesPlaceholder}
             cashOnDeliveryText={cashOnDeliveryText}
+            privacyPolicyUrl={privacyPolicyUrl}
             submitButtonText={submitButtonText}
             name={name} setName={setName}
             phone={phone} setPhone={setPhone}

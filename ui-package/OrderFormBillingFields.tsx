@@ -8,6 +8,7 @@ interface OrderFormBillingFieldsProps {
   addressPlaceholder?: string;
   notesPlaceholder?: string;
   cashOnDeliveryText?: string;
+  privacyPolicyUrl?: string;
   submitButtonText?: string;
   name: string;
   setName: (v: string) => void;
@@ -30,6 +31,7 @@ const OrderFormBillingFields: React.FC<OrderFormBillingFieldsProps> = ({
   addressPlaceholder,
   notesPlaceholder,
   cashOnDeliveryText,
+  privacyPolicyUrl,
   submitButtonText,
   name,
   setName,
@@ -50,7 +52,14 @@ const OrderFormBillingFields: React.FC<OrderFormBillingFieldsProps> = ({
         <h3 className="text-black text-2xl lg:text-3xl font-bold leading-tight">Enter Billing Details</h3>
         <p className="text-zinc-800 text-sm lg:text-base leading-5">
           Your personal data will be used to process your order, and for other purposes described in our
-          <span className="text-blue-700 underline transition-colors hover:text-blue-500 cursor-pointer"> privacy policy.</span>
+          <a
+            href={privacyPolicyUrl || "/privacy-policy"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-700 underline transition-colors hover:text-blue-500"
+          >
+            {" "}privacy policy.
+          </a>
         </p>
       </div>
 
@@ -90,34 +99,46 @@ const OrderFormBillingFields: React.FC<OrderFormBillingFieldsProps> = ({
             শিপিং এরিয়া সিলেক্ট করুন <span style={{ color: primaryColor }}>*</span>
           </h4>
           <div className="mt-1 border-t border-neutral-200">
-            {shippingOptions.map((option) => (
-              <div
-                key={option.id}
-                onClick={() => setSelectedShipping(option.id || '')}
-                className="cursor-pointer py-3 border-b border-neutral-200 flex justify-between items-center transition-all duration-200 hover:bg-violet-200/50 rounded-lg -mx-2 px-2"
-                role="radio"
-                aria-checked={selectedShipping === option.id}
-              >
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-5 h-5 lg:w-6 lg:h-6 rounded-full border-2 flex items-center justify-center p-0.5 transition-all duration-200"
-                    style={{
-                      borderColor: selectedShipping === option.id ? '#65a30d' : '#e5e5e5'
-                    }}
+            <fieldset className="w-full" role="radiogroup" aria-label="Shipping options">
+              {shippingOptions.map((option) => {
+                const optionId = option.id || '';
+                const isSelected = selectedShipping === optionId;
+
+                return (
+                  <label
+                    key={optionId || option.label}
+                    className="cursor-pointer py-3 border-b border-neutral-200 flex justify-between items-center transition-all duration-200 hover:bg-violet-200/50 rounded-lg -mx-2 px-2"
                   >
-                    {selectedShipping === option.id && (
-                      <div className="w-full h-full bg-lime-600 rounded-full" />
-                    )}
-                  </div>
-                  <span className="text-zinc-800 text-base lg:text-xl font-normal leading-6">
-                    {option.label}
-                  </span>
-                </div>
-                <span className="text-zinc-800 text-base lg:text-xl font-semibold leading-6">
-                  ৳ {option.price}
-                </span>
-              </div>
-            ))}
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="shipping-option"
+                        value={optionId}
+                        checked={isSelected}
+                        onChange={() => setSelectedShipping(optionId)}
+                        className="sr-only"
+                      />
+                      <div
+                        className="w-5 h-5 lg:w-6 lg:h-6 rounded-full border-2 flex items-center justify-center p-0.5 transition-all duration-200"
+                        style={{
+                          borderColor: isSelected ? '#65a30d' : '#e5e5e5'
+                        }}
+                      >
+                        {isSelected && (
+                          <div className="w-full h-full bg-lime-600 rounded-full" />
+                        )}
+                      </div>
+                      <span className="text-zinc-800 text-base lg:text-xl font-normal leading-6">
+                        {option.label}
+                      </span>
+                    </div>
+                    <span className="text-zinc-800 text-base lg:text-xl font-semibold leading-6">
+                      ৳ {option.price}
+                    </span>
+                  </label>
+                );
+              })}
+            </fieldset>
           </div>
         </div>
 

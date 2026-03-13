@@ -7,7 +7,7 @@ interface OrderFormProductListProps {
   isLoadingProduct: boolean;
   productData: any;
   variants: any[];
-  maxProductsToShow?: number;
+  maxVariantsToShow?: number;
   selectedVariantId: string | number;
   setSelectedVariantId: (id: string | number) => void;
   selectedSize: string;
@@ -28,7 +28,7 @@ const OrderFormProductList: React.FC<OrderFormProductListProps> = ({
   isLoadingProduct,
   productData,
   variants,
-  maxProductsToShow,
+  maxVariantsToShow,
   selectedVariantId,
   setSelectedVariantId,
   selectedSize,
@@ -44,6 +44,8 @@ const OrderFormProductList: React.FC<OrderFormProductListProps> = ({
   displayProductPrice,
   displayProductImage
 }) => {
+  const variantLimit = Math.max(0, maxVariantsToShow ?? variants.length);
+
   return (
     <div className="flex-1 p-3 lg:p-6 bg-white flex flex-col justify-start items-start gap-4 border-b lg:border-b-0 lg:border-r border-neutral-200">
       <h3 className="text-zinc-800 text-2xl lg:text-3xl font-bold leading-tight">Select Product</h3>
@@ -53,14 +55,15 @@ const OrderFormProductList: React.FC<OrderFormProductListProps> = ({
       ) : productData ? (
         <div className="w-full flex flex-col gap-3">
           {variants.length > 0 ? (
-            variants.slice(0, maxProductsToShow || variants.length).map((variant: any) => {
+            variants.slice(0, variantLimit).map((variant: any) => {
               const isSelected = String(variant.id) === String(selectedVariantId);
               
               const { label: vLabel, value: vValue } = getVariantDisplayValues(variant);
               const dName = getLocalizedString(rawProductName);
               
-              const vPrice = variant.price || variant.current_pricing?.unit_price || variant.current_pricing?.retail_price || productData?.price || productData?.current_pricing?.unit_price || productData?.current_pricing?.retail_price;
-              const dPrice = vPrice ? (String(vPrice).includes('৳') ? String(vPrice) : `৳${vPrice}`) : (productPrice || "৳1499");
+              const vPrice = variant.price ?? variant.current_pricing?.unit_price ?? variant.current_pricing?.retail_price ?? productData?.price ?? productData?.current_pricing?.unit_price ?? productData?.current_pricing?.retail_price;
+              const hasPrice = vPrice !== null && vPrice !== undefined && String(vPrice).trim() !== '';
+              const dPrice = hasPrice ? (String(vPrice).includes('৳') ? String(vPrice) : `৳${vPrice}`) : (productPrice || "৳1499");
               
               const vImage = variant.image || variant.thumbnail || productData?.image || productData?.thumbnail_image || productData?.thumbnail || productData?.thumbnail_url || productImage;
 
@@ -69,7 +72,13 @@ const OrderFormProductList: React.FC<OrderFormProductListProps> = ({
               return (
                 <div 
                   key={variant.id}
-                  onClick={() => setSelectedVariantId(variant.id)}
+                  onClick={() => {
+                    setSelectedVariantId(variant.id);
+                    const nextSizes = getSizesArray(variant.sizes || productData?.sizes);
+                    if (selectedSize && !nextSizes.includes(selectedSize)) {
+                      setSelectedSize('');
+                    }
+                  }}
                   className="p-4 bg-white border rounded-xl flex flex-col gap-4 cursor-pointer transition-all"
                   style={{
                     borderColor: isSelected ? primaryColor : '#e5e5e5',
@@ -227,10 +236,9 @@ const OrderFormProductList: React.FC<OrderFormProductListProps> = ({
 
       {/* Product Information */}
       {productData?.description && (
-        <div 
-          className="w-full mt-2 text-sm text-zinc-600 font-normal leading-relaxed max-h-32 overflow-y-auto custom-scrollbar pr-2"
-          dangerouslySetInnerHTML={{ __html: getLocalizedString(productData.description) }}
-        />
+        <p className="w-full mt-2 text-sm text-zinc-600 font-normal leading-relaxed max-h-32 overflow-y-auto custom-scrollbar pr-2 whitespace-pre-wrap">
+          {getLocalizedString(productData.description)}
+        </p>
       )}
 
       {/* Quantity Selector */}

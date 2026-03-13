@@ -215,7 +215,7 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
         <ProductSelector value={value} onChange={onChange} id={id} />
       )
     },
-    maxProductsToShow: { type: "number", label: "MAX VARIANTS TO SHOW" },
+    maxVariantsToShow: { type: "number", label: "MAX VARIANTS TO SHOW" },
     UI_SECTION: {
       type: "custom",
       render: () => <div className="text-xs font-bold text-gray-500 mt-4 mb-1 uppercase">UI Configuration</div>,
@@ -246,14 +246,15 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
     addressPlaceholder: { type: "textarea", label: "ADDRESS PLACEHOLDER" },
     notesPlaceholder: { type: "text", label: "NOTES PLACEHOLDER" },
     cashOnDeliveryText: { type: "text", label: "CASH ON DELIVERY TEXT" },
+    privacyPolicyUrl: { type: "text", label: "PRIVACY POLICY URL" },
     primaryColor: { type: "text", label: "PRIMARY COLOR" },
     textColor: { type: "text", label: "TEXT COLOR" },
     backgroundColor: { type: "text", label: "BACKGROUND COLOR" },
   },
   defaultProps: {
-    apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "https://seheran.dev-inventory.softzino.xyz/api/v1",
+    apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "",
     productId: process.env.NEXT_PUBLIC_PRODUCT_ID || "3",
-    maxProductsToShow: 2,
+    maxVariantsToShow: 2,
     title: "Stock সীমিত – আজই অর্ডার করুন!",
     description: "অর্ডার করতে নীচের ফর্মটি পূরণ করুন এবং অর্ডার করুন বাটনে ক্লিক করুন!",
     submitButtonText: "অর্ডার কনফার্ম করুন",
@@ -271,6 +272,7 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
     addressPlaceholder: "আপনার ঠিকানা",
     notesPlaceholder: "লিখুন",
     cashOnDeliveryText: "Cash on delivery. We prioritizing frictionless payments",
+    privacyPolicyUrl: "/privacy-policy",
     primaryColor: "#F36621",
     textColor: "#27272a",
     backgroundColor: "#f3e8ff",

@@ -11,9 +11,19 @@ export const getLocalizedString = (val: any): string => {
 export const getSizesArray = (sizes: any): string[] => {
   if (!sizes) return [];
   if (Array.isArray(sizes)) {
-    return sizes.map((s: any) => typeof s === 'string' ? s : (s.name || s.label || s.value || String(s.id || s)));
+    return sizes
+      .map((s: any) => {
+        const raw = typeof s === 'string' ? s : (s?.name || s?.label || s?.value || String(s?.id || s));
+        return String(raw || '').trim();
+      })
+      .filter(Boolean);
   }
-  if (typeof sizes === 'string') return sizes.split(',').map(s => s.trim());
+  if (typeof sizes === 'string') {
+    return sizes
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
+  }
   return [];
 };
 
