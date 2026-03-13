@@ -10,7 +10,7 @@ interface OrderFormCartSummaryProps {
   total: number;
 }
 
-const OrderFormCartSummary: React.FC<OrderFormCartSummaryProps> = ({
+export default function OrderFormCartSummary({
   isLoadingProduct,
   displayProductName,
   selectedSize,
@@ -18,7 +18,7 @@ const OrderFormCartSummary: React.FC<OrderFormCartSummaryProps> = ({
   subtotal,
   shippingCharge,
   total
-}) => {
+}: OrderFormCartSummaryProps) {
   return (
     <div className="flex-1 self-stretch p-4 lg:p-6 bg-neutral-50 border-b lg:border-b-0 lg:border-r border-violet-200 flex flex-col justify-start items-start gap-6">
       <h3 className="text-zinc-800 text-2xl lg:text-3xl font-bold leading-tight">Your Cart</h3>
@@ -57,6 +57,4 @@ const OrderFormCartSummary: React.FC<OrderFormCartSummaryProps> = ({
       </div>
     </div>
   );
-};
-
-export default OrderFormCartSummary;
+}

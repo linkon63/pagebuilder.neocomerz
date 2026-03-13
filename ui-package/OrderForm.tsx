@@ -36,7 +36,7 @@ interface OrderFormUIProps {
   maxProductsToShow?: number;
 }
 
-const OrderFormUI: React.FC<OrderFormUIProps> = ({
+export default function OrderFormUI({
   title,
   description,
   submitButtonText,
@@ -58,7 +58,7 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
   orderPlacementUrl,
   maxVariantsToShow,
   maxProductsToShow
-}) => {
+}: OrderFormUIProps) {
   const primaryColor = colors.primary || '#F36621';
   const textColor = colors.text || '#27272a';
   const backgroundColor = colors.background || '#f3e8ff';
@@ -256,6 +256,4 @@ const OrderFormUI: React.FC<OrderFormUIProps> = ({
       </div>
     </section>
   );
-};
-
-export default OrderFormUI;
+}

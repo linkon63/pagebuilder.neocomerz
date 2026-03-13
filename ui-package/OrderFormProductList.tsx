@@ -24,7 +24,7 @@ interface OrderFormProductListProps {
   displayProductImage?: string;
 }
 
-const OrderFormProductList: React.FC<OrderFormProductListProps> = ({
+export default function OrderFormProductList({
   isLoadingProduct,
   productData,
   variants,
@@ -43,7 +43,7 @@ const OrderFormProductList: React.FC<OrderFormProductListProps> = ({
   displayProductName,
   displayProductPrice,
   displayProductImage
-}) => {
+}: OrderFormProductListProps) {
   const variantLimit = Math.max(0, maxVariantsToShow ?? variants.length);
 
   return (
@@ -264,6 +264,4 @@ const OrderFormProductList: React.FC<OrderFormProductListProps> = ({
       </div>
     </div>
   );
-};
-
-export default OrderFormProductList;
+}

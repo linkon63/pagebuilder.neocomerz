@@ -24,7 +24,7 @@ interface OrderFormBillingFieldsProps {
   isSubmitting: boolean;
 }
 
-const OrderFormBillingFields: React.FC<OrderFormBillingFieldsProps> = ({
+export default function OrderFormBillingFields({
   primaryColor,
   namePlaceholder,
   phonePlaceholder,
@@ -45,7 +45,7 @@ const OrderFormBillingFields: React.FC<OrderFormBillingFieldsProps> = ({
   selectedShipping,
   setSelectedShipping,
   isSubmitting
-}) => {
+}: OrderFormBillingFieldsProps) {
   return (
     <div className="flex-1 self-stretch p-4 lg:p-6 bg-neutral-100 flex flex-col justify-start items-start gap-6">
       <div className="flex flex-col gap-1">
@@ -195,6 +195,4 @@ const OrderFormBillingFields: React.FC<OrderFormBillingFieldsProps> = ({
       </div>
     </div>
   );
-};
-
-export default OrderFormBillingFields;
+}
