@@ -23,7 +23,7 @@ export interface FAQUIProps {
   };
 }
 
-const WhatsAppButton = ({ phoneNumber, labelText, className }: { phoneNumber: string, labelText: string, className?: string }) => {
+const WhatsAppButton = ({ phoneNumber, labelText, className = "" }: { phoneNumber: string, labelText: string, className?: string }) => {
   return (
     <a
       href={`https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}`}
@@ -113,8 +113,11 @@ export default function FAQUI({
                   className="w-full py-5 sm:py-6 border-b border-zinc-300 transition-all duration-300 ease-in-out hover:bg-black/5 last:border-b-0"
                 >
                   <button
+                    type="button"
                     onClick={() => toggleFAQ(index)}
                     className="w-full flex justify-between items-start gap-4 sm:gap-6 text-left group"
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${index}`}
                   >
                     <div className="flex-1 flex flex-col justify-start items-start gap-0 min-w-0">
                       <h3 
@@ -124,6 +127,7 @@ export default function FAQUI({
                         {faq.question}
                       </h3>
                       <div
+                        id={`faq-answer-${index}`}
                         className={`w-full overflow-hidden transition-all duration-300 ease-in-out ${isOpen
                             ? 'max-h-[500px] opacity-100 mt-4'
                             : 'max-h-0 opacity-0 mt-0'

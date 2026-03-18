@@ -177,7 +177,7 @@ export default function OrderFormUI({
         setName(''); setPhone(''); setAddress(''); setNotes(''); setQuantity(1);
       } catch (err) {
         setIsSubmitting(false);
-        alert('Failed to submit via API. (Simulated successful placement due to missing endpoint CORS/Error).');
+        alert('Failed to submit order. Please try again or contact support.');
       }
     } else {
       setTimeout(() => {

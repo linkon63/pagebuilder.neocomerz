@@ -1,11 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import SectionHeader from './SectionHeader';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
 
 export interface TestimonialImageItem {
   src: string;
@@ -37,23 +33,8 @@ export default function TestimonialsUI({
   loadingText = "লোড হচ্ছে...",
   colors = {}
 }: TestimonialsUIProps) {
-  const primaryColor = colors.primary || '#F36621';
   const textColor = colors.text || '#27272a';
   const backgroundColor = colors.background || '#f3f4f6';
-
-  const [displayCount, setDisplayCount] = useState(initialDisplayCount);
-  const [isLoading, setIsLoading] = useState(false);
-  const displayedImages = images.slice(0, displayCount);
-  const hasMore = displayCount < images.length;
-
-  const handleLoadMore = () => {
-    if (!hasMore || isLoading) return;
-    setIsLoading(true);
-    setTimeout(() => {
-      setDisplayCount(prev => Math.min(prev + loadMoreCount, images.length));
-      setIsLoading(false);
-    }, 300);
-  };
 
   return (
     <section className="pt-24 pb-40 relative" style={{ backgroundColor }}>
@@ -66,75 +47,23 @@ export default function TestimonialsUI({
           description={<span style={{ color: textColor }}>{description}</span>}
         />
         <div className="mt-16 relative">
-          {images.length >= 4 ? (
-            <div className="w-full pb-12">
-              <Swiper
-                modules={[Autoplay, Pagination]}
-                spaceBetween={16}
-                slidesPerView={1}
-                pagination={{ clickable: true }}
-                autoplay={{ delay: 3000, disableOnInteraction: false }}
-                loop={true}
-                breakpoints={{
-                  640: { slidesPerView: 2 },
-                  768: { slidesPerView: 3 },
-                  1024: { slidesPerView: 4 },
-                }}
-                className="w-full"
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {images.map((testimonial, index) => (
+              <div
+                key={`${testimonial.src}-${index}`}
+                className="group rounded-lg overflow-hidden relative"
               >
-                {images.map((testimonial, index) => (
-                  <SwiperSlide key={`${testimonial.src}-${index}`}>
-                    <div className="group rounded-lg overflow-hidden relative">
-                      <img
-                        src={testimonial.src}
-                        alt={testimonial.alt || `Testimonial screenshot ${index + 1}`}
-                        className="w-full h-[500px] rounded-lg group-hover:scale-105 transition-transform duration-300 ease-in-out object-cover object-bottom"
-                        loading={index < 4 ? 'eager' : 'lazy'}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          ) : (
-            <>
-              <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-                {displayedImages.map((testimonial, index) => (
-                  <div
-                    key={`${testimonial.src}-${index}`}
-                    className="relative break-inside-avoid group rounded-lg overflow-hidden animate-fade-in"
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <img
-                      src={testimonial.src}
-                      alt={testimonial.alt || `Testimonial screenshot ${index + 1}`}
-                      className="w-full h-[500px] rounded-lg group-hover:scale-105 transition-transform duration-300 ease-in-out object-cover object-bottom"
-                      loading={index < initialDisplayCount ? 'eager' : 'lazy'}
-                    />
-                  </div>
-                ))}
+                <img
+                  src={testimonial.src}
+                  alt={testimonial.alt || `Testimonial screenshot ${index + 1}`}
+                  className="w-full h-[500px] rounded-lg group-hover:scale-105 transition-transform duration-300 ease-in-out object-cover object-bottom"
+                  loading={index < 4 ? 'eager' : 'lazy'}
+                />
               </div>
-              <div 
-                className="absolute bottom-0 left-0 right-0 h-26 pointer-events-none" 
-                style={{ background: `linear-gradient(to top, ${backgroundColor}, transparent)` }}
-              />
-            </>
-          )}
+            ))}
+          </div>
         </div>
       </div>
-      {hasMore && images.length < 4 && (
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-10">
-          <button
-            onClick={handleLoadMore}
-            disabled={isLoading}
-            className="px-8 py-4 bg-white rounded-full shadow-[0px_0px_100px_rgba(0,0,0,0.14)] text-xl leading-7 hover:bg-gray-50 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2"
-            style={{ color: textColor }}
-            aria-label="Load more testimonials"
-          >
-            {isLoading ? loadingText : loadMoreText}
-          </button>
-        </div>
-      )}
     </section>
   );
 }
