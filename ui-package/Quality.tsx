@@ -25,34 +25,38 @@ interface QualityUIProps {
   };
 }
 
-const QualityUI: React.FC<QualityUIProps> = ({
+export default function QualityUI({
   title,
   subtitle,
   imageCards = [],
   detailCards = [],
   ctaButton,
   colors = {}
-}) => {
+}: QualityUIProps) {
   const primaryColor = colors.primary || '#F36621';
   const textColor = colors.text || '#27272a';
   const backgroundColor = colors.background || '#f3f4f6';
 
-  const CheckListItem: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    <li className="flex items-start gap-2">
-      <BsCheckCircleFill className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-      <span className="text-gray-700 leading-relaxed">{children}</span>
-    </li>
-  );
+  function CheckListItem({ children }: { children: React.ReactNode }) {
+    return (
+      <li className="flex items-start gap-2">
+        <BsCheckCircleFill className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+        <span className="text-gray-700 leading-relaxed">{children}</span>
+      </li>
+    );
+  }
 
-  const PrimaryButton: React.FC<{ href?: string; children: React.ReactNode }> = ({ href, children }) => (
-    <a
-      href={href || '#'}
-      className="inline-block px-8 py-4 text-white font-bold rounded-lg transition-all hover:opacity-90 shadow-lg"
-      style={{ backgroundColor: primaryColor }}
-    >
-      {children}
-    </a>
-  );
+  function PrimaryButton({ href, children }: { href?: string; children: React.ReactNode }) {
+    return (
+      <a
+        href={href || '#'}
+        className="inline-block px-8 py-4 text-white font-bold rounded-lg transition-all hover:opacity-90 shadow-lg"
+        style={{ backgroundColor: primaryColor }}
+      >
+        {children}
+      </a>
+    );
+  }
 
   return (
     <main>
@@ -132,6 +136,4 @@ const QualityUI: React.FC<QualityUIProps> = ({
       </section>
     </main>
   );
-};
-
-export default QualityUI;
+}
