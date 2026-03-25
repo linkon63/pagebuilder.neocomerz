@@ -156,3 +156,8 @@ export type PuckProps = {
     backgroundColor?: string;
   };
 };
+
+export type RootProps = {
+  title?: string;
+  slug?: string;
+};
