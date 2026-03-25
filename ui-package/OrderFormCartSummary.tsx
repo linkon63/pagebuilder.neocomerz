@@ -4,6 +4,7 @@ interface OrderFormCartSummaryProps {
   isLoadingProduct: boolean;
   displayProductName: string;
   selectedSize: string;
+  selectedSizeLabel?: string;
   quantity: number;
   subtotal: number;
   shippingCharge: number;
@@ -14,6 +15,7 @@ export default function OrderFormCartSummary({
   isLoadingProduct,
   displayProductName,
   selectedSize,
+  selectedSizeLabel = 'Size',
   quantity,
   subtotal,
   shippingCharge,
@@ -31,7 +33,7 @@ export default function OrderFormCartSummary({
               {isLoadingProduct ? "Loading..." : displayProductName}
             </h4>
             {selectedSize && (
-              <span className="text-sm text-zinc-500 mt-1 font-medium bg-neutral-100 px-2 py-0.5 rounded">Size: {selectedSize}</span>
+              <span className="text-sm text-zinc-500 mt-1 font-medium bg-neutral-100 px-2 py-0.5 rounded">{selectedSizeLabel}: {selectedSize}</span>
             )}
           </div>
           <div className="flex items-end gap-4">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import OrderFormProductList from './OrderFormProductList';
 import OrderFormCartSummary from './OrderFormCartSummary';
 import OrderFormBillingFields from './OrderFormBillingFields';
-import { getLocalizedString, getSizesArray, getVariantDisplayValues } from './OrderFormHelpers';
+import { getLocalizedString, getSizesArray, getVariantDisplayValues, getDynamicSizeLabel } from './OrderFormHelpers';
 
 interface OrderFormUIProps {
   title?: string;
@@ -32,8 +32,6 @@ interface OrderFormUIProps {
   apiKey?: string;
   productId?: string | number;
   orderPlacementUrl?: string;
-  maxVariantsToShow?: number;
-  maxProductsToShow?: number;
   allowedVariants?: { name: string }[];
 }
 
@@ -57,8 +55,6 @@ export default function OrderFormUI({
   apiKey,
   productId,
   orderPlacementUrl,
-  maxVariantsToShow,
-  maxProductsToShow,
   allowedVariants
 }: OrderFormUIProps) {
   const primaryColor = colors.primary || '#F36621';
@@ -77,9 +73,6 @@ export default function OrderFormUI({
   const [isLoadingProduct, setIsLoadingProduct] = useState(false);
   const [selectedVariantId, setSelectedVariantId] = useState<string | number>('');
   const [selectedSize, setSelectedSize] = useState<string>('');
-
-  // Backward-compatible fallback for previously saved content.
-  const effectiveMaxVariantsToShow = maxVariantsToShow ?? maxProductsToShow;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -119,19 +112,13 @@ export default function OrderFormUI({
   let filteredVariants = rawVariants;
   if (allowedVariants && allowedVariants.length > 0) {
     const allowedList = allowedVariants.map(a => (a.name || '').toLowerCase().trim()).filter(Boolean);
-    if (allowedList.length > 0) {
+    if (allowedList.length > 0 && !allowedList.includes('default')) {
       filteredVariants = rawVariants.filter((v: any) => {
-        const { label, value } = getVariantDisplayValues(v);
-        const nameStr = String(v.name || v.title || v.sku || value || '').toLowerCase().trim();
-        const sizes = getSizesArray(v.sizes || productData?.sizes).map(s => s.toLowerCase().trim());
-        const colors = [String(v.color || '').toLowerCase().trim(), String(v.attribute_value || '').toLowerCase().trim()].filter(Boolean);
+        const { label } = getVariantDisplayValues(v);
+        const vLabel = (label || 'Variant').toLowerCase().trim();
+        const sLabel = getDynamicSizeLabel(v, productData).toLowerCase().trim();
         
-        return allowedList.some(allowed => 
-           nameStr === allowed || nameStr.includes(allowed) || 
-           sizes.includes(allowed) || 
-           colors.includes(allowed) ||
-           String(label).toLowerCase().trim() === allowed
-        );
+        return allowedList.includes(vLabel) || allowedList.includes(sLabel);
       });
     }
   }
@@ -236,7 +223,6 @@ export default function OrderFormUI({
             productData={productData}
             variants={variants}
             allowedVariants={allowedVariants}
-            maxVariantsToShow={effectiveMaxVariantsToShow}
             selectedVariantId={selectedVariantId}
             setSelectedVariantId={setSelectedVariantId}
             selectedSize={selectedSize}
@@ -257,6 +243,7 @@ export default function OrderFormUI({
             isLoadingProduct={isLoadingProduct}
             displayProductName={displayProductName}
             selectedSize={selectedSize}
+            selectedSizeLabel={getDynamicSizeLabel(selectedVariantData, productData) || 'Size'}
             quantity={quantity}
             subtotal={subtotal}
             shippingCharge={shippingCharge}
