@@ -7,6 +7,7 @@ interface OrderFormProductListProps {
   isLoadingProduct: boolean;
   productData: any;
   variants: any[];
+  allowedVariants?: { name: string }[];
   maxVariantsToShow?: number;
   selectedVariantId: string | number;
   setSelectedVariantId: (id: string | number) => void;
@@ -28,6 +29,7 @@ export default function OrderFormProductList({
   isLoadingProduct,
   productData,
   variants,
+  allowedVariants,
   maxVariantsToShow,
   selectedVariantId,
   setSelectedVariantId,
@@ -67,7 +69,14 @@ export default function OrderFormProductList({
               
               const vImage = variant.image || variant.thumbnail || productData?.image || productData?.thumbnail_image || productData?.thumbnail || productData?.thumbnail_url || productImage;
 
-              const sizes = getSizesArray(variant.sizes || productData?.sizes);
+              let sizes = getSizesArray(variant.sizes || productData?.sizes);
+              
+              if (allowedVariants && allowedVariants.length > 0) {
+                const allowedList = allowedVariants.map(a => (a.name || '').toLowerCase().trim()).filter(Boolean);
+                if (allowedList.length > 0) {
+                  sizes = sizes.filter(s => allowedList.some(allowed => s.toLowerCase().trim() === allowed || s.toLowerCase().trim().includes(allowed)));
+                }
+              }
 
               return (
                 <div 
@@ -203,10 +212,21 @@ export default function OrderFormProductList({
                 </div>
               </div>
 
-              {getSizesArray(productData?.sizes).length > 0 && (
-                <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                  <span className="text-sm font-bold text-zinc-800">Size:</span>
-                  {getSizesArray(productData?.sizes).map((size: string) => {
+              {(() => {
+                let sizes = getSizesArray(productData?.sizes);
+                if (allowedVariants && allowedVariants.length > 0) {
+                  const allowedList = allowedVariants.map(a => (a.name || '').toLowerCase().trim()).filter(Boolean);
+                  if (allowedList.length > 0) {
+                    sizes = sizes.filter(s => allowedList.some(allowed => s.toLowerCase().trim() === allowed || s.toLowerCase().trim().includes(allowed)));
+                  }
+                }
+                
+                if (sizes.length === 0) return null;
+                
+                return (
+                  <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                    <span className="text-sm font-bold text-zinc-800">Size:</span>
+                    {sizes.map((size: string) => {
                     const isSizeSelected = selectedSize === size;
                     return (
                       <button
@@ -226,7 +246,8 @@ export default function OrderFormProductList({
                     )
                   })}
                 </div>
-              )}
+                );
+              })()}
             </div>
           )}
         </div>

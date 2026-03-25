@@ -34,6 +34,7 @@ interface OrderFormUIProps {
   orderPlacementUrl?: string;
   maxVariantsToShow?: number;
   maxProductsToShow?: number;
+  allowedVariants?: { name: string }[];
 }
 
 export default function OrderFormUI({
@@ -57,7 +58,8 @@ export default function OrderFormUI({
   productId,
   orderPlacementUrl,
   maxVariantsToShow,
-  maxProductsToShow
+  maxProductsToShow,
+  allowedVariants
 }: OrderFormUIProps) {
   const primaryColor = colors.primary || '#F36621';
   const textColor = colors.text || '#27272a';
@@ -108,7 +110,29 @@ export default function OrderFormUI({
 
   const effectiveProductId = productId ?? allProducts[0]?.id ?? '';
   const productData = allProducts.find(p => String(p.id) === String(effectiveProductId)) || allProducts[0];
-  const variants = productData?.variants || productData?.attributes || [];
+  let rawVariants = productData?.variants || productData?.attributes || [];
+  
+  let filteredVariants = rawVariants;
+  if (allowedVariants && allowedVariants.length > 0) {
+    const allowedList = allowedVariants.map(a => (a.name || '').toLowerCase().trim()).filter(Boolean);
+    if (allowedList.length > 0) {
+      filteredVariants = rawVariants.filter((v: any) => {
+        const { label, value } = getVariantDisplayValues(v);
+        const nameStr = String(v.name || v.title || v.sku || value || '').toLowerCase().trim();
+        const sizes = getSizesArray(v.sizes || productData?.sizes).map(s => s.toLowerCase().trim());
+        const colors = [String(v.color || '').toLowerCase().trim(), String(v.attribute_value || '').toLowerCase().trim()].filter(Boolean);
+        
+        return allowedList.some(allowed => 
+           nameStr === allowed || nameStr.includes(allowed) || 
+           sizes.includes(allowed) || 
+           colors.includes(allowed) ||
+           String(label).toLowerCase().trim() === allowed
+        );
+      });
+    }
+  }
+
+  const variants = filteredVariants;
 
   useEffect(() => {
     if (variants.length > 0) {
@@ -207,6 +231,7 @@ export default function OrderFormUI({
             isLoadingProduct={isLoadingProduct}
             productData={productData}
             variants={variants}
+            allowedVariants={allowedVariants}
             maxVariantsToShow={effectiveMaxVariantsToShow}
             selectedVariantId={selectedVariantId}
             setSelectedVariantId={setSelectedVariantId}

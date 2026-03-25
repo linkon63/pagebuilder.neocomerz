@@ -134,7 +134,9 @@ export type PuckProps = {
     UI_SECTION?: any;
     apiBaseUrl?: string;
     productId?: string | number;
+    maxProductsToShow?: number;
     maxVariantsToShow?: number;
+    allowedVariants?: { name: string }[];
     title?: string;
     description?: string;
     submitButtonText?: string;
