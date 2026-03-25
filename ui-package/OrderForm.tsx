@@ -90,9 +90,13 @@ export default function OrderFormUI({
         const headers: Record<string, string> = { "Accept": "application/json" };
         if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
 
-        const endpoint = productId
-          ? `${baseUrl.replace(/\/$/, '')}/products/${productId}`
-          : `${baseUrl.replace(/\/$/, '')}/products`;
+        if (!productId) {
+          console.warn("OrderFormUI: productId is required to fetch product data.");
+          setIsLoadingProduct(false);
+          return;
+        }
+        
+        const endpoint = `${baseUrl.replace(/\/$/, '')}/products/${productId}`;
         const url = endpoint;
         const res = await fetch(url, { headers });
         const data = await res.json();

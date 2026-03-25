@@ -101,12 +101,12 @@ export default function OrderFormBillingFields({
           <div className="mt-1 border-t border-neutral-200">
             <fieldset className="w-full" role="radiogroup" aria-label="Shipping options">
               {shippingOptions.map((option, index) => {
-                const optionId = option.id || `shipping-${index}`;
+                const optionId = option.id ?? String(index);
                 const isSelected = selectedShipping === optionId;
 
                 return (
                   <label
-                    key={optionId}
+                    key={option.id ?? `${option.label}-${index}`}
                     className="cursor-pointer py-3 border-b border-neutral-200 flex justify-between items-center transition-all duration-200 hover:bg-violet-200/50 rounded-lg -mx-2 px-2"
                   >
                     <div className="flex items-center gap-2">
