@@ -8,45 +8,118 @@ import { config } from "../puck.config";
 import { fetchProducts, type Product } from "@/lib/api";
 import { Package, Search, X, Copy, Check } from "lucide-react";
 
-function JSONModal({ data, onClose }: { data: any; onClose: () => void }) {
-  const [copied, setCopied] = useState(false);
-  const jsonString = JSON.stringify(data, null, 2);
+function SaveModal({ data, onClose }: { data: any; onClose: () => void }) {
+  const [slug, setSlug] = useState("");
+  const [title, setTitle] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [showJson, setShowJson] = useState(false);
+  const [result, setResult] = useState<{ success: boolean; message: string } | null>(null);
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(jsonString);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const formatSlug = (value: string) =>
+    value.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-");
+
+  const handleSave = async () => {
+    if (!slug.trim() || !title.trim()) return;
+    setSaving(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/pages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug: slug.trim(), title: title.trim(), data }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setResult({ success: true, message: `✅ Page saved! Visit: /${slug.trim()}` });
+      } else {
+        setResult({ success: false, message: `❌ ${json.error}` });
+      }
+    } catch (err: any) {
+      setResult({ success: false, message: `❌ ${err.message}` });
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-background border rounded-2xl shadow-2xl w-full max-w-4xl max-h-[80vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
-        <div className="p-6 border-b flex items-center justify-between bg-muted/30">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div className="p-6 border-b flex justify-between items-center">
           <div>
-            <h2 className="text-xl font-bold">Published Page Data</h2>
-            <p className="text-sm text-muted-foreground">This JSON contains your landing page configuration and content.</p>
+            <h2 className="text-lg font-bold">Save Page to Database</h2>
+            <p className="text-sm text-gray-500 mt-1">Slug দিন — এই slug দিয়ে page visit করা যাবে</p>
           </div>
-          <div className="flex items-center gap-2">
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+            <X size={20} />
+          </button>
+        </div>
+        
+        <div className="p-6 space-y-4 overflow-y-auto">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g., Summer Collection"
+                className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Slug</label>
+              <div className="flex">
+                <span className="inline-flex items-center px-3 py-2 bg-gray-100 border border-r-0 rounded-l-lg text-sm text-gray-500 font-mono">/</span>
+                <input
+                  type="text"
+                  value={slug}
+                  onChange={(e) => setSlug(formatSlug(e.target.value))}
+                  placeholder="summer-collection"
+                  className="flex-1 px-3 py-2 border rounded-r-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="border rounded-lg overflow-hidden">
             <button 
-              onClick={copyToClipboard}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:opacity-90 transition-all active:scale-95"
+              onClick={() => setShowJson(!showJson)}
+              className="w-full px-4 py-2 bg-gray-50 text-left text-xs font-semibold text-gray-600 flex justify-between items-center"
             >
-              {copied ? <Check size={18} /> : <Copy size={18} />}
-              {copied ? "Copied!" : "Copy JSON"}
+              <span>{showJson ? "Hide JSON Data" : "Show JSON Data"}</span>
+              <span className="text-[10px] bg-gray-200 px-1.5 py-0.5 rounded uppercase">Preview</span>
             </button>
-            <button onClick={onClose} className="p-2 hover:bg-muted rounded-full transition-colors">
-              <X size={24} />
-            </button>
+            {showJson && (
+              <div className="p-4 bg-slate-900 overflow-x-auto max-h-60">
+                <pre className="text-emerald-400 font-mono text-[11px] leading-tight">
+                  {JSON.stringify(data, null, 2)}
+                </pre>
+              </div>
+            )}
           </div>
+
+          {result && (
+            <div className={`p-3 rounded-lg text-sm font-medium ${result.success ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
+              {result.message}
+            </div>
+          )}
         </div>
-        <div className="flex-1 overflow-auto p-6 bg-slate-950">
-          <pre className="text-blue-400 font-mono text-sm leading-relaxed">
-            {jsonString}
-          </pre>
-        </div>
-        <div className="p-4 border-t bg-muted/30 flex justify-end">
-          <button onClick={onClose} className="px-6 py-2 border rounded-lg font-medium hover:bg-background transition-colors">
-            Close
+
+        <div className="p-4 border-t bg-gray-50 flex justify-end gap-3">
+          <button onClick={onClose} className="px-4 py-2 border rounded-lg text-sm font-medium hover:bg-white text-gray-600">
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving || !slug.trim() || !title.trim()}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
+          >
+            {saving ? (
+              <>
+                <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                Saving...
+              </>
+            ) : "Save & Publish"}
           </button>
         </div>
       </div>
@@ -164,7 +237,7 @@ function BuilderContent() {
       />
 
       {publishData && (
-        <JSONModal 
+        <SaveModal 
           data={publishData} 
           onClose={() => setPublishData(null)} 
         />
