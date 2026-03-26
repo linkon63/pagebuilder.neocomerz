@@ -5,8 +5,24 @@ import { ImageUpload } from "../../components/ImageUpload";
 import { OrderFormUI } from "neocomerz-storefront-ui";
 import { FiChevronDown, FiSearch, FiCheck } from "react-icons/fi";
 
+
 const productImageSrc = "/ui-images/products/product2.webp";
-import { getLocalizedString, getSizesArray, getVariantDisplayValues } from "@/ui-package/OrderFormHelpers";
+
+// Inline helpers (not in NPM package)
+function getLocalizedString(val: any): string {
+  if (!val) return "";
+  if (typeof val === "string") return val;
+  return val.en || val.bn || Object.values(val)[0] || "";
+}
+function getSizesArray(variants: any[]): string[] {
+  return [...new Set(variants?.map((v: any) => v?.size).filter(Boolean))];
+}
+function getVariantDisplayValues(variant: any): { label: string; value: string } {
+  return {
+    label: String(variant?.name || variant?.title || variant?.sku || variant?.size || ""),
+    value: String(variant?.value || variant?.size || variant?.sku || ""),
+  };
+}
 
 // Helper to get selected component props
 function getSelectedProps(appState: any) {
