@@ -25,7 +25,7 @@ interface SizeChartUIProps {
   };
 }
 
-const SizeChartUI: React.FC<SizeChartUIProps> = ({
+export default function SizeChartUI({
   title,
   description,
   sizeData = [],
@@ -36,7 +36,7 @@ const SizeChartUI: React.FC<SizeChartUIProps> = ({
   contactText,
   returnPolicy,
   colors = {}
-}) => {
+}: SizeChartUIProps) {
   const primaryColor = colors.primary || '#10b981';
   const textColor = colors.text || '#27272a';
   const backgroundColor = colors.background || '#ffffff';
@@ -132,6 +132,4 @@ const SizeChartUI: React.FC<SizeChartUIProps> = ({
       </div>
     </section>
   );
-};
-
-export default SizeChartUI;
+}
