@@ -1,9 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import SizeChartUI from "@/ui-package/SizeChart";
-
-import chartImage from "@/ui-package/images/panjabi-chart.png";
+import { SizeChartUI } from "neocomerz-storefront-ui";
 
 export const SizeChart: ComponentConfig<PuckProps["SizeChart"]> = {
   label: "Size Chart Component",
@@ -58,7 +56,7 @@ export const SizeChart: ComponentConfig<PuckProps["SizeChart"]> = {
         xxl: "46",
       },
     ],
-    chartImage: (chartImage as any).src,
+    chartImage: "/ui-images/panjabi-chart.png",
     chartImageAlt: "Sweatshirt measurement guide",
     whatsappText: "যেকোন প্রয়োজনে",
     whatsappNumber: "01712508063",

@@ -1,12 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "@/puck/types/puck";
 import { ImageUpload } from "@/components/ImageUpload";
-import GalleryColUI from "@/ui-package/GalleryCol";
-
-import img1 from "@/ui-package/images/products/product1.webp";
-import img2 from "@/ui-package/images/products/product2.webp";
-import img3 from "@/ui-package/images/products/product3.webp";
-import img4 from "@/ui-package/images/products/product4.webp";
+import { GalleryColUI } from "neocomerz-storefront-ui";
 
 export const GalleryCol: ComponentConfig<PuckProps["GalleryCol"]> = {
   label: "Gallery Column",
@@ -40,10 +35,10 @@ export const GalleryCol: ComponentConfig<PuckProps["GalleryCol"]> = {
     title: "Our Product Gallery",
     description: "Check out our latest collection and high-quality product images.",
     images: [
-      { src: (img1 as any).src, alt: "Product 1" },
-      { src: (img2 as any).src, alt: "Product 2" },
-      { src: (img3 as any).src, alt: "Product 3" },
-      { src: (img4 as any).src, alt: "Product 4" },
+      { src: "/ui-images/products/product1.webp", alt: "Product 1" },
+      { src: "/ui-images/products/product2.webp", alt: "Product 2" },
+      { src: "/ui-images/products/product3.webp", alt: "Product 3" },
+      { src: "/ui-images/products/product4.webp", alt: "Product 4" },
     ],
   },
   render: (props: any) => {

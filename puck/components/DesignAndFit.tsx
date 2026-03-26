@@ -1,11 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import DesignAndFitUI from "@/ui-package/DesignAndFit";
-
-import heroMain from "@/ui-package/images/hero-2/hero-main.webp";
-import heroOverlay from "@/ui-package/images/hero-2/hero-overlay.webp";
-import jannat from "@/ui-package/images/feature-1/feature-3.webp";
+import { DesignAndFitUI } from "neocomerz-storefront-ui";
 
 export const DesignAndFit: ComponentConfig<PuckProps["DesignAndFit"]> = {
   label: "Design & Fit Section",
@@ -59,19 +55,19 @@ export const DesignAndFit: ComponentConfig<PuckProps["DesignAndFit"]> = {
     subtitle: "পাঞ্জাবি সাশ্রয় দামে - আজকের সেরা ডিল",
     imageCards: [
       {
-        image: (heroMain as any).src,
+        image: "/ui-images/hero-2/hero-main.webp",
         title: "ফিল:",
         description: "সফট, স্কিন-ফ্রেন্ডলি, আরামদায়ক",
         alt: "Fabric quality showcase"
       },
       {
-        image: (heroOverlay as any).src,
+        image: "/ui-images/hero-2/hero-overlay.webp",
         title: "থিকনেস:",
         description: "রাজকীয় কারুকাজে অভিজাত্যের ছোঁয়া",
         alt: "Embroidery detail showcase"
       },
       {
-        image: (jannat as any).src,
+        image: "/ui-images/feature-1/feature-3.webp",
         title: "ফ্রি অফার:",
         description: "প্রিমিয়াম কোয়ালিটির পায়জামা সম্পূর্ণ ফ্রি!",
         alt: "Free payjama offer"

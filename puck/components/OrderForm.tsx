@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { ComponentConfig, usePuck } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import OrderFormUI from "@/ui-package/OrderForm";
+import { OrderFormUI } from "neocomerz-storefront-ui";
 import { FiChevronDown, FiSearch, FiCheck } from "react-icons/fi";
 
-import productImage from "@/ui-package/images/products/product2.webp";
+const productImageSrc = "/ui-images/products/product2.webp";
 import { getLocalizedString, getSizesArray, getVariantDisplayValues } from "@/ui-package/OrderFormHelpers";
 
 // Helper to get selected component props
@@ -24,14 +24,14 @@ function getSelectedProps(appState: any) {
 
 // Helper to render product image safely
 const renderProductImage = (p: any, className: string) => {
-  const imgSrc = p.image || p.thumbnail_image || p.thumbnail || p.thumbnail_url || (productImage as any).src;
+  const imgSrc = p.image || p.thumbnail_image || p.thumbnail || p.thumbnail_url || productImageSrc;
   return (
     <img
       src={imgSrc}
       alt={getLocalizedString(p.name || p.title || "Product")}
       className={className}
       onError={(e) => {
-        (e.target as HTMLImageElement).src = (productImage as any).src;
+        (e.target as HTMLImageElement).src = productImageSrc;
       }}
     />
   );
@@ -384,7 +384,7 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
     title: "Stock সীমিত – আজই অর্ডার করুন!",
     description: "অর্ডার করতে নীচের ফর্মটি পূরণ করুন এবং অর্ডার করুন বাটনে ক্লিক করুন!",
     submitButtonText: "অর্ডার কনফার্ম করুন",
-    productImage: (productImage as any).src,
+    productImage: productImageSrc,
     productImageAlt: "Premium Quality Panjabi",
     productName: "প্রিমিয়াম Quality Panjabi",
     productPrice: "৳1499",
