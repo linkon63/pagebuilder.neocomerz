@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ComponentConfig, usePuck } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
+import { useBuilderSession } from "@/components/BuilderSessionProvider";
 import { OrderFormUI } from "neocomerz-storefront-ui";
 import { FiChevronDown, FiSearch, FiCheck } from "react-icons/fi";
 
@@ -36,6 +37,21 @@ function getSelectedProps(appState: any) {
   return currentArray?.[selector.index]?.props;
 }
 
+const ApiBaseUrlInfo = () => {
+  const session = useBuilderSession();
+
+  return (
+    <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+      <p className="font-semibold uppercase tracking-wide text-slate-500 mb-1">
+        Tenant API Base URL
+      </p>
+      <p className="font-mono break-all">
+        {session?.tenantApiBaseUrl || "Tenant API base URL will appear after SSO login."}
+      </p>
+    </div>
+  );
+};
+
 
 
 // Helper to render product image safely
@@ -55,6 +71,7 @@ const renderProductImage = (p: any, className: string) => {
 
 const ProductSelector = ({ value, onChange, id }: any) => {
   const { appState } = usePuck();
+  const session = useBuilderSession();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -63,29 +80,19 @@ const ProductSelector = ({ value, onChange, id }: any) => {
 
   const props = getSelectedProps(appState);
 
-  const baseUrl = props?.apiBaseUrl || process.env.NEXT_PUBLIC_API_BASE_URL;
-  const apiKey = props?.apiKey;
-
   useEffect(() => {
-    if (!baseUrl) return;
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const headers: Record<string, string> = {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        };
-        if (apiKey) {
-          headers["Authorization"] = `Bearer ${apiKey}`;
-        }
-
-        const url = `${baseUrl.replace(/\/$/, '')}/products`;
-
-        const res = await fetch(url, { headers });
+        const res = await fetch("/api/products", {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          cache: "no-store",
+        });
         const data = await res.json();
-
-        // Handle common response formats
-        const items = Array.isArray(data) ? data : (data.data || data.products || []);
+        const items = Array.isArray(data) ? data : data.data || data.products || [];
         setProducts(items);
       } catch (err) {
         console.warn("Puck products fetch failed:", err instanceof Error ? err.message : String(err));
@@ -93,8 +100,8 @@ const ProductSelector = ({ value, onChange, id }: any) => {
         setLoading(false);
       }
     };
-    fetchProducts();
-  }, [baseUrl, apiKey]);
+    void fetchProducts();
+  }, [session?.tenantApiBaseUrl]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -207,31 +214,26 @@ const ProductSelector = ({ value, onChange, id }: any) => {
 
 const VariantSelector = ({ value, onChange, id }: any) => {
   const { appState } = usePuck();
+  const session = useBuilderSession();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const props = getSelectedProps(appState);
 
-  const baseUrl = props?.apiBaseUrl || process.env.NEXT_PUBLIC_API_BASE_URL;
-  const apiKey = props?.apiKey;
   const productId = props?.productId;
 
   useEffect(() => {
-    if (!baseUrl || !productId) return;
+    if (!productId) return;
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const headers: Record<string, string> = {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        };
-        if (apiKey) {
-          headers["Authorization"] = `Bearer ${apiKey}`;
-        }
-
-        const url = `${baseUrl.replace(/\/$/, '')}/products/${productId}`;
-
-        const res = await fetch(url, { headers });
+        const res = await fetch(`/api/products/${productId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          cache: "no-store",
+        });
         const data = await res.json();
 
         const pData = data.data || data.product || data;
@@ -242,8 +244,8 @@ const VariantSelector = ({ value, onChange, id }: any) => {
         setLoading(false);
       }
     };
-    fetchProduct();
-  }, [baseUrl, apiKey, productId]);
+    void fetchProduct();
+  }, [productId, session?.tenantApiBaseUrl]);
 
   const allVariantsAndSizes = new Set<string>();
   if (product) {
@@ -335,7 +337,10 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
       type: "custom",
       render: () => <div className="text-xs font-bold text-gray-500 mt-2 mb-1 uppercase">API Configuration</div>,
     },
-    apiBaseUrl: { type: "text", label: "API BASE URL" },
+    apiBaseUrlInfo: {
+      type: "custom",
+      render: () => <ApiBaseUrlInfo />,
+    },
     PRODUCT_SECTION: {
       type: "custom",
       render: () => <div className="text-xs font-bold text-gray-500 mt-4 mb-1 uppercase">Product Selection</div>,
@@ -392,7 +397,7 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
     backgroundColor: { type: "text", label: "BACKGROUND COLOR" },
   },
   defaultProps: {
-    apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "",
+    apiBaseUrl: "",
     productId: process.env.NEXT_PUBLIC_PRODUCT_ID || "3",
     maxProductsToShow: 5,
     maxVariantsToShow: 5,

@@ -4,7 +4,10 @@ import { proxyJsonResponse, proxyTenantRequest } from "@/lib/builder-proxy";
 
 export const runtime = "nodejs";
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const session = getBuilderSessionFromRequest(request);
 
   if (!session) {
@@ -14,14 +17,18 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  const { id } = await params;
   const response = await proxyTenantRequest(session, {
-    path: "/page-builder/pages",
+    path: `/page-builder/pages/${id}`,
   });
 
   return proxyJsonResponse(response);
 }
 
-export async function POST(request: NextRequest) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const session = getBuilderSessionFromRequest(request);
 
   if (!session) {
@@ -31,6 +38,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const { id } = await params;
   const body = await request.json().catch(() => null);
 
   if (!body) {
@@ -41,8 +49,8 @@ export async function POST(request: NextRequest) {
   }
 
   const response = await proxyTenantRequest(session, {
-    method: "POST",
-    path: "/page-builder/pages",
+    method: "PUT",
+    path: `/page-builder/pages/${id}`,
     body,
   });
 
