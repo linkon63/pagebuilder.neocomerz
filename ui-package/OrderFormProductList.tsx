@@ -1,13 +1,13 @@
 import React from 'react';
 import { LuShoppingBag } from 'react-icons/lu';
 import { FiPlus, FiMinus } from 'react-icons/fi';
-import { getLocalizedString, getSizesArray, getVariantDisplayValues } from './OrderFormHelpers';
+import { getLocalizedString, getSizesArray, getVariantDisplayValues, getDynamicSizeLabel } from './OrderFormHelpers';
 
 interface OrderFormProductListProps {
   isLoadingProduct: boolean;
   productData: any;
   variants: any[];
-  maxVariantsToShow?: number;
+  allowedVariants?: { name: string }[];
   selectedVariantId: string | number;
   setSelectedVariantId: (id: string | number) => void;
   selectedSize: string;
@@ -28,7 +28,7 @@ export default function OrderFormProductList({
   isLoadingProduct,
   productData,
   variants,
-  maxVariantsToShow,
+  allowedVariants,
   selectedVariantId,
   setSelectedVariantId,
   selectedSize,
@@ -44,8 +44,6 @@ export default function OrderFormProductList({
   displayProductPrice,
   displayProductImage
 }: OrderFormProductListProps) {
-  const variantLimit = Math.max(0, maxVariantsToShow ?? variants.length);
-
   return (
     <div className="flex-1 p-3 lg:p-6 bg-white flex flex-col justify-start items-start gap-4 border-b lg:border-b-0 lg:border-r border-neutral-200">
       <h3 className="text-zinc-800 text-2xl lg:text-3xl font-bold leading-tight">Select Product</h3>
@@ -55,7 +53,7 @@ export default function OrderFormProductList({
       ) : productData ? (
         <div className="w-full flex flex-col gap-3">
           {variants.length > 0 ? (
-            variants.slice(0, variantLimit).map((variant: any) => {
+            variants.map((variant: any) => {
               const isSelected = String(variant.id) === String(selectedVariantId);
               
               const { label: vLabel, value: vValue } = getVariantDisplayValues(variant);
@@ -67,7 +65,17 @@ export default function OrderFormProductList({
               
               const vImage = variant.image || variant.thumbnail || productData?.image || productData?.thumbnail_image || productData?.thumbnail || productData?.thumbnail_url || productImage;
 
-              const sizes = getSizesArray(variant.sizes || productData?.sizes);
+              let sizes = getSizesArray(variant.sizes || productData?.sizes);
+              
+              if (allowedVariants && allowedVariants.length > 0) {
+                const allowedList = allowedVariants.map(a => (a.name || '').toLowerCase().trim()).filter(Boolean);
+                if (allowedList.length > 0) {
+                  const sizeLabel = getDynamicSizeLabel(variant, productData).toLowerCase().trim();
+                  if (!allowedList.includes(sizeLabel) && !allowedList.includes('default')) {
+                    sizes = [];
+                  }
+                }
+              }
 
               return (
                 <div 
@@ -133,7 +141,7 @@ export default function OrderFormProductList({
 
                   {sizes.length > 0 && (
                     <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                      <span className="text-sm font-bold text-zinc-800">Size:</span>
+                      <span className="text-sm font-bold text-zinc-800">{getDynamicSizeLabel(variant, productData)}:</span>
                       {sizes.map((size: string) => {
                         const isSizeSelected = isSelected && selectedSize === size;
                         return (
@@ -203,10 +211,24 @@ export default function OrderFormProductList({
                 </div>
               </div>
 
-              {getSizesArray(productData?.sizes).length > 0 && (
-                <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                  <span className="text-sm font-bold text-zinc-800">Size:</span>
-                  {getSizesArray(productData?.sizes).map((size: string) => {
+              {(() => {
+                let sizes = getSizesArray(productData?.sizes);
+                if (allowedVariants && allowedVariants.length > 0) {
+                  const allowedList = allowedVariants.map(a => (a.name || '').toLowerCase().trim()).filter(Boolean);
+                  if (allowedList.length > 0) {
+                    const sizeLabel = getDynamicSizeLabel(null, productData).toLowerCase().trim();
+                    if (!allowedList.includes(sizeLabel) && !allowedList.includes('default')) {
+                      sizes = [];
+                    }
+                  }
+                }
+                
+                if (sizes.length === 0) return null;
+                
+                return (
+                  <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                    <span className="text-sm font-bold text-zinc-800">{getDynamicSizeLabel(null, productData)}:</span>
+                    {sizes.map((size: string) => {
                     const isSizeSelected = selectedSize === size;
                     return (
                       <button
@@ -226,7 +248,8 @@ export default function OrderFormProductList({
                     )
                   })}
                 </div>
-              )}
+                );
+              })()}
             </div>
           )}
         </div>

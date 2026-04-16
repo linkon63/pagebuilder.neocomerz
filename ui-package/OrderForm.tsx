@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import OrderFormProductList from './OrderFormProductList';
 import OrderFormCartSummary from './OrderFormCartSummary';
 import OrderFormBillingFields from './OrderFormBillingFields';
-import { getLocalizedString, getSizesArray, getVariantDisplayValues } from './OrderFormHelpers';
+import { getLocalizedString, getSizesArray, getVariantDisplayValues, getDynamicSizeLabel } from './OrderFormHelpers';
 
 interface OrderFormUIProps {
   title?: string;
@@ -32,8 +32,7 @@ interface OrderFormUIProps {
   apiKey?: string;
   productId?: string | number;
   orderPlacementUrl?: string;
-  maxVariantsToShow?: number;
-  maxProductsToShow?: number;
+  allowedVariants?: { name: string }[];
 }
 
 export default function OrderFormUI({
@@ -56,8 +55,7 @@ export default function OrderFormUI({
   apiKey,
   productId,
   orderPlacementUrl,
-  maxVariantsToShow,
-  maxProductsToShow
+  allowedVariants
 }: OrderFormUIProps) {
   const primaryColor = colors.primary || '#F36621';
   const textColor = colors.text || '#27272a';
@@ -76,9 +74,6 @@ export default function OrderFormUI({
   const [selectedVariantId, setSelectedVariantId] = useState<string | number>('');
   const [selectedSize, setSelectedSize] = useState<string>('');
 
-  // Backward-compatible fallback for previously saved content.
-  const effectiveMaxVariantsToShow = maxVariantsToShow ?? maxProductsToShow;
-
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoadingProduct(true);
@@ -88,9 +83,13 @@ export default function OrderFormUI({
         const headers: Record<string, string> = { "Accept": "application/json" };
         if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
 
-        const endpoint = productId
-          ? `${baseUrl.replace(/\/$/, '')}/products/${productId}`
-          : `${baseUrl.replace(/\/$/, '')}/products`;
+        if (!productId) {
+          console.warn("OrderFormUI: productId is required to fetch product data.");
+          setIsLoadingProduct(false);
+          return;
+        }
+        
+        const endpoint = `${baseUrl.replace(/\/$/, '')}/products/${productId}`;
         const url = endpoint;
         const res = await fetch(url, { headers });
         const data = await res.json();
@@ -108,7 +107,23 @@ export default function OrderFormUI({
 
   const effectiveProductId = productId ?? allProducts[0]?.id ?? '';
   const productData = allProducts.find(p => String(p.id) === String(effectiveProductId)) || allProducts[0];
-  const variants = productData?.variants || productData?.attributes || [];
+  let rawVariants = productData?.variants || productData?.attributes || [];
+  
+  let filteredVariants = rawVariants;
+  if (allowedVariants && allowedVariants.length > 0) {
+    const allowedList = allowedVariants.map(a => (a.name || '').toLowerCase().trim()).filter(Boolean);
+    if (allowedList.length > 0 && !allowedList.includes('default')) {
+      filteredVariants = rawVariants.filter((v: any) => {
+        const { label } = getVariantDisplayValues(v);
+        const vLabel = (label || 'Variant').toLowerCase().trim();
+        const sLabel = getDynamicSizeLabel(v, productData).toLowerCase().trim();
+        
+        return allowedList.includes(vLabel) || allowedList.includes(sLabel);
+      });
+    }
+  }
+
+  const variants = filteredVariants;
 
   useEffect(() => {
     if (variants.length > 0) {
@@ -177,7 +192,7 @@ export default function OrderFormUI({
         setName(''); setPhone(''); setAddress(''); setNotes(''); setQuantity(1);
       } catch (err) {
         setIsSubmitting(false);
-        alert('Failed to submit via API. (Simulated successful placement due to missing endpoint CORS/Error).');
+        alert('Failed to submit order. Please try again or contact support.');
       }
     } else {
       setTimeout(() => {
@@ -207,7 +222,7 @@ export default function OrderFormUI({
             isLoadingProduct={isLoadingProduct}
             productData={productData}
             variants={variants}
-            maxVariantsToShow={effectiveMaxVariantsToShow}
+            allowedVariants={allowedVariants}
             selectedVariantId={selectedVariantId}
             setSelectedVariantId={setSelectedVariantId}
             selectedSize={selectedSize}
@@ -228,6 +243,7 @@ export default function OrderFormUI({
             isLoadingProduct={isLoadingProduct}
             displayProductName={displayProductName}
             selectedSize={selectedSize}
+            selectedSizeLabel={getDynamicSizeLabel(selectedVariantData, productData) || 'Size'}
             quantity={quantity}
             subtotal={subtotal}
             shippingCharge={shippingCharge}

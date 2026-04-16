@@ -134,7 +134,7 @@ export type PuckProps = {
     UI_SECTION?: any;
     apiBaseUrl?: string;
     productId?: string | number;
-    maxVariantsToShow?: number;
+    allowedVariants?: { name: string }[];
     title?: string;
     description?: string;
     submitButtonText?: string;
@@ -156,5 +156,29 @@ export type PuckProps = {
     primaryColor?: string;
     textColor?: string;
     backgroundColor?: string;
+  };
+  Testimonials: {
+    title?: string;
+    description?: string;
+    images?: { src: string; alt?: string }[];
+    initialDisplayCount?: number;
+    loadMoreCount?: number;
+    loadMoreText?: string;
+    loadingText?: string;
+    primaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+  };
+  FAQ: {
+    heading?: string;
+    descriptionPart1?: string;
+    descriptionPart2?: string;
+    descriptionPart3?: string;
+    contactLabel?: string;
+    contactNumber?: string;
+    faqs?: { question: string; answer: string }[];
+    primaryColor?: string;
+    backgroundColor?: string;
+    faqBackgroundColor?: string;
   };
 };

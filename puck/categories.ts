@@ -9,7 +9,7 @@ export const categories: Config<PuckProps>["categories"] = {
 
   CONTENT: {
     title: "CONTENT Components",
-    components: ["Heading", "Text", "Button"],
+    components: ["Heading", "Text", "Button", "FAQ"],
   },
 
   PREBUILT: {
@@ -40,5 +40,10 @@ export const categories: Config<PuckProps>["categories"] = {
   COMMERCE: {
     title: "COMMERCE Components",
     components: ["OrderForm"],
+  },
+
+  REVIEWS: {
+    title: "REVIEWS Components",
+    components: ["Testimonials"],
   },
 };
