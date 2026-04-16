@@ -5,25 +5,10 @@ import { ImageUpload } from "../../components/ImageUpload";
 import { useBuilderSession } from "@/components/BuilderSessionProvider";
 import { OrderFormUI } from "neocomerz-storefront-ui";
 import { FiChevronDown, FiSearch, FiCheck } from "react-icons/fi";
+import { getLocalizedString, getSizesArray, getVariantDisplayValues, getDynamicSizeLabel } from "@/ui-package/OrderFormHelpers";
 
 
 const productImageSrc = "/ui-images/products/product2.webp";
-
-// Inline helpers (not in NPM package)
-function getLocalizedString(val: any): string {
-  if (!val) return "";
-  if (typeof val === "string") return val;
-  return val.en || val.bn || Object.values(val)[0] || "";
-}
-function getSizesArray(variants: any[]): string[] {
-  return [...new Set(variants?.map((v: any) => v?.size).filter(Boolean))];
-}
-function getVariantDisplayValues(variant: any): { label: string; value: string } {
-  return {
-    label: String(variant?.name || variant?.title || variant?.sku || variant?.size || ""),
-    value: String(variant?.value || variant?.size || variant?.sku || ""),
-  };
-}
 
 // Helper to get selected component props
 function getSelectedProps(appState: any) {
@@ -217,6 +202,8 @@ const VariantSelector = ({ value, onChange, id }: any) => {
   const session = useBuilderSession();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const props = getSelectedProps(appState);
 
@@ -247,26 +234,52 @@ const VariantSelector = ({ value, onChange, id }: any) => {
     void fetchProduct();
   }, [productId, session?.tenantApiBaseUrl]);
 
-  const allVariantsAndSizes = new Set<string>();
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const availableVariantNames = new Set<string>();
+
   if (product) {
     const variants = product.variants || product.attributes || [];
     variants.forEach((v: any) => {
-      const { label, value: val } = getVariantDisplayValues(v);
-      const nameStr = String(v.name || v.title || v.sku || val || '');
-      if (nameStr) allVariantsAndSizes.add(nameStr);
-      if (v.color) allVariantsAndSizes.add(String(v.color));
-      if (v.attribute_value) allVariantsAndSizes.add(String(v.attribute_value));
-      if (label) allVariantsAndSizes.add(String(label));
+      const { label } = getVariantDisplayValues(v);
+      const vLabel = label || 'Variant'; 
+      if (vLabel && vLabel.toLowerCase() !== 'variant') {
+        availableVariantNames.add(vLabel);
+      }
 
       const vSizes = getSizesArray(v.sizes);
-      vSizes.forEach((s: string) => allVariantsAndSizes.add(s));
-    });
+      if (vSizes.length) {
+         let sizeLabel = getDynamicSizeLabel(v, product);
+         if (sizeLabel === 'Variant' && label) sizeLabel = label;
+         if (sizeLabel && sizeLabel.toLowerCase() !== 'variant') {
+           availableVariantNames.add(sizeLabel);
+         }
+      }
+    });5
     
     const pSizes = getSizesArray(product.sizes);
-    pSizes.forEach((s: string) => allVariantsAndSizes.add(s));
+    if (pSizes.length > 0) {
+       const sizeLabel = getDynamicSizeLabel(null, product);
+       if (sizeLabel && sizeLabel.toLowerCase() !== 'variant') {
+         availableVariantNames.add(sizeLabel);
+       }
+    }
   }
 
-  const uniqueOptions = Array.from(allVariantsAndSizes).filter(Boolean);
+  const uniqueVariantNames = Array.from(availableVariantNames).filter(Boolean);
+  
+  if (uniqueVariantNames.length === 0 && product) {
+     uniqueVariantNames.push('Default');
+  }
+
   const selectedList = Array.isArray(value) ? value : [];
 
   const handleToggle = (opt: string) => {
@@ -290,39 +303,62 @@ const VariantSelector = ({ value, onChange, id }: any) => {
   }
 
   return (
-    <div className="flex flex-col gap-2 mt-2">
-      <div className="flex justify-between items-center">
-        <span className="text-xs font-medium text-gray-500">DYNAMIC VARIANT FILTER:</span>
-        {selectedList.length > 0 && (
-          <button type="button" onClick={clearAll} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
-            Clear Filters
-          </button>
+    <div className="flex flex-col gap-2 mt-1 relative z-40">
+      <div className="relative" ref={dropdownRef}>
+        {/* Dropdown Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full p-3 bg-white border border-gray-300 rounded-lg shadow-sm flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
+        >
+          <span className="text-sm font-medium text-gray-700 truncate">
+            {selectedList.length > 0 ? `${selectedList.length} variant(s) selected` : "Select variants..."}
+          </span>
+          <FiChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+        </button>
+
+        {/* Dropdown Menu */}
+        {isOpen && (
+          <div className="absolute top-full left-0 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-[100] transform opacity-100 scale-100 transition-all duration-200 flex flex-col">
+            <div className="flex justify-between items-center p-3 border-b border-gray-100 bg-gray-50/50">
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Available Variants</span>
+              {selectedList.length > 0 && (
+                <button type="button" onClick={clearAll} className="text-xs text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap ml-2">
+                  Clear All
+                </button>
+              )}
+            </div>
+
+            <div className="max-h-64 overflow-y-auto w-full p-2 space-y-2 custom-scrollbar bg-white">
+              {loading ? (
+                <div className="p-4 text-center text-sm text-gray-500 animate-pulse">Loading variants from API...</div>
+              ) : uniqueVariantNames.length > 0 ? (
+                <div className="flex flex-col gap-2 p-1">
+                  {uniqueVariantNames.map((opt, i) => {
+                    const isSelected = selectedList.some((item: any) => item.name === opt);
+                    return (
+                      <label key={`${opt}-${i}`} className={`flex flex-row items-center cursor-pointer px-3 py-2 rounded-lg border text-sm transition-all duration-200 w-full ${isSelected ? 'bg-blue-50 border-blue-400 text-blue-800 shadow-sm font-semibold' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'}`}>
+                        <input 
+                          type="checkbox" 
+                          className="mr-3 w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500"
+                          checked={isSelected} 
+                          onChange={() => handleToggle(opt)} 
+                        />
+                        <span className="font-medium whitespace-nowrap">{opt}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="p-4 text-center text-sm text-gray-500">
+                  No specific variants or sizes found.
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </div>
-      {loading ? (
-        <span className="text-sm text-gray-500 block p-2 bg-gray-50 rounded animate-pulse">Loading variants from API...</span>
-      ) : uniqueOptions.length > 0 ? (
-        <div className="flex flex-wrap gap-2 p-3 bg-gray-50 border border-gray-200 rounded-lg max-h-48 overflow-y-auto custom-scrollbar shadow-inner">
-          {uniqueOptions.map((opt, i) => {
-            const isSelected = selectedList.some((item: any) => item.name === opt);
-            return (
-              <label key={`${opt}-${i}`} className={`flex flex-row items-center cursor-pointer px-2.5 py-1.5 rounded inline-flex border text-sm transition-all duration-200 ${isSelected ? 'bg-blue-50 border-blue-400 text-blue-800 shadow-sm' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'}`}>
-                <input 
-                  type="checkbox" 
-                  className="mr-2 w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500"
-                  checked={isSelected} 
-                  onChange={() => handleToggle(opt)} 
-                />
-                <span className="font-medium whitespace-nowrap">{opt}</span>
-              </label>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs text-gray-500 text-center">
-          No specific variants or sizes found for this product.
-        </div>
-      )}
+
       <div className="text-[10px] text-gray-400 mt-0.5 leading-tight">
         *If no variants are selected, ALL active variants for the API product will be shown by default.
       </div>
@@ -352,11 +388,9 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
         <ProductSelector value={value} onChange={onChange} id={id} />
       )
     },
-    maxProductsToShow: { type: "number", label: "MAX PRODUCTS TO SHOW" },
-    maxVariantsToShow: { type: "number", label: "MAX VARIANTS TO SHOW" },
     allowedVariants: {
       type: "custom",
-      label: "ALLOWED VARIANTS (SIZE/COLOR)",
+      label: "SELECT VARIANT NAME",
       render: ({ value, onChange, id }) => (
         <VariantSelector value={value} onChange={onChange} id={id} />
       )
@@ -399,8 +433,6 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
   defaultProps: {
     apiBaseUrl: "",
     productId: process.env.NEXT_PUBLIC_PRODUCT_ID || "3",
-    maxProductsToShow: 5,
-    maxVariantsToShow: 5,
     allowedVariants: [],
     title: "Stock সীমিত – আজই অর্ডার করুন!",
     description: "অর্ডার করতে নীচের ফর্মটি পূরণ করুন এবং অর্ডার করুন বাটনে ক্লিক করুন!",
