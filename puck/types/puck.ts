@@ -134,6 +134,7 @@ export type PuckProps = {
     UI_SECTION?: any;
     apiBaseUrl?: string;
     productId?: string | number;
+    maxVariantsToShow?: number;
     title?: string;
     description?: string;
     submitButtonText?: string;
@@ -151,6 +152,7 @@ export type PuckProps = {
     addressPlaceholder?: string;
     notesPlaceholder?: string;
     cashOnDeliveryText?: string;
+    privacyPolicyUrl?: string;
     primaryColor?: string;
     textColor?: string;
     backgroundColor?: string;
