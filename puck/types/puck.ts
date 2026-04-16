@@ -130,6 +130,7 @@ export type PuckProps = {
   };
   OrderForm: {
     API_SECTION?: any;
+    apiBaseUrlInfo?: any;
     PRODUCT_SECTION?: any;
     UI_SECTION?: any;
     apiBaseUrl?: string;

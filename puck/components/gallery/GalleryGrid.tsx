@@ -1,13 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "@/puck/types/puck";
 import { ImageUpload } from "@/components/ImageUpload";
-import GalleryGridUI from "@/ui-package/GalleryGrid";
-
-import img1 from "@/ui-package/images/products/product1.webp";
-import img2 from "@/ui-package/images/products/product2.webp";
-import img3 from "@/ui-package/images/products/product3.webp";
-import img4 from "@/ui-package/images/products/product4.webp";
-import img5 from "@/ui-package/images/products/product5.webp";
+import { GalleryGridUI } from "neocomerz-storefront-ui";
 
 export const GalleryGrid: ComponentConfig<PuckProps["GalleryGrid"]> = {
   label: "Gallery Grid (9 Pack)",
@@ -41,11 +35,11 @@ export const GalleryGrid: ComponentConfig<PuckProps["GalleryGrid"]> = {
     title: "Curated Collection",
     description: "Explore our visually stunning grid of premium products and lifestyle shots.",
     images: [
-      { src: (img1 as any).src, alt: "Featured" },
-      { src: (img2 as any).src, alt: "Product 1" },
-      { src: (img3 as any).src, alt: "Product 2" },
-      { src: (img4 as any).src, alt: "Product 3" },
-      { src: (img5 as any).src, alt: "Product 4" },
+      { src: "/ui-images/products/product1.webp", alt: "Featured" },
+      { src: "/ui-images/products/product2.webp", alt: "Product 1" },
+      { src: "/ui-images/products/product3.webp", alt: "Product 2" },
+      { src: "/ui-images/products/product4.webp", alt: "Product 3" },
+      { src: "/ui-images/products/product5.webp", alt: "Product 4" },
     ],
   },
   render: (props: any) => {

@@ -1,6 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import FAQUI from "@/ui-package/FAQ";
+// import FAQUI from "@/ui-package/FAQ";
+import { FAQUI } from "neocomerz-storefront-ui";
 
 export const FAQ: ComponentConfig<PuckProps["FAQ"]> = {
   fields: {

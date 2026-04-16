@@ -1,7 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import LayeredHeroUI from "@/ui-package/LayeredHero";
+import { LayeredHeroUI } from "neocomerz-storefront-ui";
 
 export const LayeredHero: ComponentConfig<PuckProps["LayeredHero"]> = {
   label: "Layered Hero",
@@ -66,6 +66,10 @@ export const LayeredHero: ComponentConfig<PuckProps["LayeredHero"]> = {
     showCtaIcon: { label: "Show CTA Icon", type: "radio", options: [{ label: "Yes", value: true }, { label: "No", value: false }] },
   },
   defaultProps: {
+    mainImage: "/ui-images/hero-2/hero-main.webp",
+    logoSrc: "/ui-images/hero-2/Logo.svg",
+    overlayImage: "/ui-images/hero-2/hero-overlay.webp",
+    shadowImage: "/ui-images/hero-2/left-shadow.webp",
     logoAlt: "Logo image",
     watermarkText: "Shirt",
     titlePrimary: "এই শীতের",

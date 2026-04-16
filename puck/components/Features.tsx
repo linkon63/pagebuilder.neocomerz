@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import FeaturesUI from "@/ui-package/Features";
+import { FeaturesUI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 
 const DEFAULT_CTA_TEXT = "এখনই অর্ডার করুন";

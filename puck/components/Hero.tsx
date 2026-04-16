@@ -1,7 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import HeroUI from "@/ui-package/Hero";
+import { Hero as HeroUI } from "neocomerz-storefront-ui";
 
 export const Hero: ComponentConfig<PuckProps["Hero"]> = {
   fields: {
@@ -54,6 +54,8 @@ export const Hero: ComponentConfig<PuckProps["Hero"]> = {
     textColor: { type: "text" },
   },
   defaultProps: {
+    backgroundImage: "/ui-images/heroBg.jpg",
+    logoSrc: "/ui-images/neoComerz-logo.svg",
     title: "STYLISH & COMFORTABLE",
     subtitle: "SUMMER COLLECTION",
     discountTag: "UP TO 50% OFF",

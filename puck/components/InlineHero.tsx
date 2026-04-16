@@ -1,7 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import InlineHeroUI from "@/ui-package/InlineHero";
+import { InlineHeroUI } from "neocomerz-storefront-ui";
 
 export const InlineHero: ComponentConfig<PuckProps["InlineHero"]> = {
     fields: {
@@ -37,6 +37,8 @@ export const InlineHero: ComponentConfig<PuckProps["InlineHero"]> = {
         textColor: { label: "Description Text Color", type: "text" },
     },
     defaultProps: {
+        backgroundImage: "/ui-images/hero-3/hero-bg.webp",
+        logoSrc: "/ui-images/hero-3/Logo.svg",
         backgroundImageAlt: "Pakistani Dress Collection Background",
         logoAlt: "NeoComerz Logo",
         logoWidth: 200,

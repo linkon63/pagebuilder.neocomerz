@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import TestimonialsUI from "@/ui-package/Testimonials";
+import { TestimonialsUI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 
 export const Testimonials: ComponentConfig<PuckProps["Testimonials"]> = {

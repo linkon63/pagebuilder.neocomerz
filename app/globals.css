@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "shadcn/tailwind.css";
+@source "../node_modules/neocomerz-storefront-ui/dist/index.js";
+@source "../node_modules/neocomerz-storefront-ui/dist/index.mjs";
 
 @custom-variant dark (&:is(.dark *));
 
