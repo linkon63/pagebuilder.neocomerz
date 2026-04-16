@@ -32,7 +32,7 @@ export interface ProductListResponse {
   data: Product[];
 }
 
-const DEFAULT_API_URL = "https://cap.dev-inventory.softzino.xyz/api/v1/products";
+const DEFAULT_API_URL = "/api/products";
 
 export async function fetchProducts(apiUrl: string = DEFAULT_API_URL): Promise<Product[]> {
   try {

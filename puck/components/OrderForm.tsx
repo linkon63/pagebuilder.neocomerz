@@ -1,0 +1,460 @@
+import React, { useState, useEffect, useRef } from "react";
+import { ComponentConfig, usePuck } from "@puckeditor/core";
+import { PuckProps } from "../types/puck";
+import { ImageUpload } from "../../components/ImageUpload";
+import { useBuilderSession } from "@/components/BuilderSessionProvider";
+import { OrderFormUI } from "neocomerz-storefront-ui";
+import { FiChevronDown, FiSearch, FiCheck } from "react-icons/fi";
+import { getLocalizedString, getSizesArray, getVariantDisplayValues, getDynamicSizeLabel } from "@/ui-package/OrderFormHelpers";
+
+
+const productImageSrc = "/ui-images/products/product2.webp";
+
+// Helper to get selected component props
+function getSelectedProps(appState: any) {
+  const selector = appState.ui.itemSelector;
+  if (!selector) return null;
+  let currentArray = appState.data.content;
+  if (selector.zone) {
+    const zoneContent = appState.data.zones?.[selector.zone];
+    if (zoneContent) currentArray = zoneContent;
+  }
+  return currentArray?.[selector.index]?.props;
+}
+
+const ApiBaseUrlInfo = () => {
+  const session = useBuilderSession();
+
+  return (
+    <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+      <p className="font-semibold uppercase tracking-wide text-slate-500 mb-1">
+        Tenant API Base URL
+      </p>
+      <p className="font-mono break-all">
+        {session?.tenantApiBaseUrl || "Tenant API base URL will appear after SSO login."}
+      </p>
+    </div>
+  );
+};
+
+
+
+// Helper to render product image safely
+const renderProductImage = (p: any, className: string) => {
+  const imgSrc = p.image || p.thumbnail_image || p.thumbnail || p.thumbnail_url || productImageSrc;
+  return (
+    <img
+      src={imgSrc}
+      alt={getLocalizedString(p.name || p.title || "Product")}
+      className={className}
+      onError={(e) => {
+        (e.target as HTMLImageElement).src = productImageSrc;
+      }}
+    />
+  );
+};
+
+const ProductSelector = ({ value, onChange, id }: any) => {
+  const { appState } = usePuck();
+  const session = useBuilderSession();
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const props = getSelectedProps(appState);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/products", {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          cache: "no-store",
+        });
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : data.data || data.products || [];
+        setProducts(items);
+      } catch (err) {
+        console.warn("Puck products fetch failed:", err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoading(false);
+      }
+    };
+    void fetchProducts();
+  }, [session?.tenantApiBaseUrl]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const selectedProduct = products.find(p => String(p.id) === String(value));
+  const filteredProducts = products.filter(p => {
+    const name = getLocalizedString(p.name || p.title || `Product ${p.id}`);
+    return name.toLowerCase().includes(searchTerm.toLowerCase()) || String(p.id).includes(searchTerm);
+  });
+
+  return (
+    <div className="flex flex-col gap-2 relative z-50">
+      {loading ? (
+        <span className="text-sm text-gray-500">Loading products...</span>
+      ) : (
+        <div className="relative" ref={dropdownRef}>
+          {/* Dropdown Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full p-3 bg-white border border-gray-300 rounded-lg shadow-sm flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
+          >
+            {selectedProduct ? (
+              <div className="flex items-center gap-3 overflow-hidden">
+                {renderProductImage(selectedProduct, "w-8 h-8 rounded-md object-cover flex-shrink-0 border border-gray-100")}
+                <span className="text-sm font-medium text-gray-700 truncate">
+                  {getLocalizedString(selectedProduct.name || selectedProduct.title || `Product ${selectedProduct.id}`)}
+                </span>
+              </div>
+            ) : (
+              <span className="text-gray-400 text-sm">Select a product...</span>
+            )}
+            <FiChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {/* Dropdown Menu */}
+          {isOpen && (
+            <div className="absolute top-full left-0 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-[100] transform opacity-100 scale-100 transition-all duration-200">
+              {/* Search Field */}
+              <div className="p-3 border-b border-gray-100 bg-gray-50/50">
+                <div className="relative">
+                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </div>
+              </div>
+
+              {/* Options List */}
+              <div className="max-h-64 overflow-y-auto w-full p-2 space-y-1 custom-scrollbar">
+                {filteredProducts.length === 0 ? (
+                  <div className="px-4 py-8 text-center text-sm text-gray-500">
+                    No products found matching "{searchTerm}"
+                  </div>
+                ) : (
+                  filteredProducts.map((p) => {
+                    const displayName = getLocalizedString(p.name || p.title || `Product ${p.id}`);
+                    const isSelected = String(p.id) === String(value);
+
+                    return (
+                      <div
+                        key={p.id}
+                        onClick={() => {
+                          onChange(String(p.id));
+                          setIsOpen(false);
+                          setSearchTerm("");
+                        }}
+                        className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors w-full ${isSelected
+                          ? "bg-blue-50 border border-blue-100"
+                          : "hover:bg-gray-100 border border-transparent"
+                          }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          {renderProductImage(p, "w-10 h-10 rounded-lg object-cover flex-shrink-0 shadow-sm border border-gray-100 bg-gray-50")}
+                          <div className="flex flex-col">
+                            <span className={`text-sm font-medium truncate max-w-[180px] ${isSelected ? 'text-blue-700' : 'text-gray-700'}`}>
+                              {displayName}
+                            </span>
+                            <span className="text-xs text-gray-400 font-mono">ID: {p.id}</span>
+                          </div>
+                        </div>
+                        {isSelected && <FiCheck className="w-5 h-5 text-blue-600 mr-2" />}
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      <div className="text-xs text-gray-400 mt-1 font-mono">
+        Selected Product ID: {value || "None"}
+      </div>
+    </div>
+  );
+};
+
+const VariantSelector = ({ value, onChange, id }: any) => {
+  const { appState } = usePuck();
+  const session = useBuilderSession();
+  const [product, setProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const props = getSelectedProps(appState);
+
+  const productId = props?.productId;
+
+  useEffect(() => {
+    if (!productId) return;
+    const fetchProduct = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/products/${productId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          cache: "no-store",
+        });
+        const data = await res.json();
+
+        const pData = data.data || data.product || data;
+        setProduct(pData);
+      } catch (err) {
+        console.warn("Puck variant fetch failed:", err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoading(false);
+      }
+    };
+    void fetchProduct();
+  }, [productId, session?.tenantApiBaseUrl]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const availableVariantNames = new Set<string>();
+
+  if (product) {
+    const variants = product.variants || product.attributes || [];
+    variants.forEach((v: any) => {
+      const { label } = getVariantDisplayValues(v);
+      const vLabel = label || 'Variant'; 
+      if (vLabel && vLabel.toLowerCase() !== 'variant') {
+        availableVariantNames.add(vLabel);
+      }
+
+      const vSizes = getSizesArray(v.sizes);
+      if (vSizes.length) {
+         let sizeLabel = getDynamicSizeLabel(v, product);
+         if (sizeLabel === 'Variant' && label) sizeLabel = label;
+         if (sizeLabel && sizeLabel.toLowerCase() !== 'variant') {
+           availableVariantNames.add(sizeLabel);
+         }
+      }
+    });5
+    
+    const pSizes = getSizesArray(product.sizes);
+    if (pSizes.length > 0) {
+       const sizeLabel = getDynamicSizeLabel(null, product);
+       if (sizeLabel && sizeLabel.toLowerCase() !== 'variant') {
+         availableVariantNames.add(sizeLabel);
+       }
+    }
+  }
+
+  const uniqueVariantNames = Array.from(availableVariantNames).filter(Boolean);
+  
+  if (uniqueVariantNames.length === 0 && product) {
+     uniqueVariantNames.push('Default');
+  }
+
+  const selectedList = Array.isArray(value) ? value : [];
+
+  const handleToggle = (opt: string) => {
+    const name = String(opt);
+    const existingIndex = selectedList.findIndex((item: any) => item.name === name);
+    if (existingIndex >= 0) {
+      const newValues = [...selectedList];
+      newValues.splice(existingIndex, 1);
+      onChange(newValues);
+    } else {
+      onChange([...selectedList, { name }]);
+    }
+  };
+
+  const clearAll = () => {
+    onChange([]);
+  };
+
+  if (!productId) {
+    return <div className="text-xs text-gray-400 mt-2">Please select a product first to view its variants.</div>;
+  }
+
+  return (
+    <div className="flex flex-col gap-2 mt-1 relative z-40">
+      <div className="relative" ref={dropdownRef}>
+        {/* Dropdown Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full p-3 bg-white border border-gray-300 rounded-lg shadow-sm flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
+        >
+          <span className="text-sm font-medium text-gray-700 truncate">
+            {selectedList.length > 0 ? `${selectedList.length} variant(s) selected` : "Select variants..."}
+          </span>
+          <FiChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+        </button>
+
+        {/* Dropdown Menu */}
+        {isOpen && (
+          <div className="absolute top-full left-0 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-[100] transform opacity-100 scale-100 transition-all duration-200 flex flex-col">
+            <div className="flex justify-between items-center p-3 border-b border-gray-100 bg-gray-50/50">
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Available Variants</span>
+              {selectedList.length > 0 && (
+                <button type="button" onClick={clearAll} className="text-xs text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap ml-2">
+                  Clear All
+                </button>
+              )}
+            </div>
+
+            <div className="max-h-64 overflow-y-auto w-full p-2 space-y-2 custom-scrollbar bg-white">
+              {loading ? (
+                <div className="p-4 text-center text-sm text-gray-500 animate-pulse">Loading variants from API...</div>
+              ) : uniqueVariantNames.length > 0 ? (
+                <div className="flex flex-col gap-2 p-1">
+                  {uniqueVariantNames.map((opt, i) => {
+                    const isSelected = selectedList.some((item: any) => item.name === opt);
+                    return (
+                      <label key={`${opt}-${i}`} className={`flex flex-row items-center cursor-pointer px-3 py-2 rounded-lg border text-sm transition-all duration-200 w-full ${isSelected ? 'bg-blue-50 border-blue-400 text-blue-800 shadow-sm font-semibold' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'}`}>
+                        <input 
+                          type="checkbox" 
+                          className="mr-3 w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500"
+                          checked={isSelected} 
+                          onChange={() => handleToggle(opt)} 
+                        />
+                        <span className="font-medium whitespace-nowrap">{opt}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="p-4 text-center text-sm text-gray-500">
+                  No specific variants or sizes found.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="text-[10px] text-gray-400 mt-0.5 leading-tight">
+        *If no variants are selected, ALL active variants for the API product will be shown by default.
+      </div>
+    </div>
+  );
+};
+
+export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
+  label: "Order Form Component",
+  fields: {
+    API_SECTION: {
+      type: "custom",
+      render: () => <div className="text-xs font-bold text-gray-500 mt-2 mb-1 uppercase">API Configuration</div>,
+    },
+    apiBaseUrlInfo: {
+      type: "custom",
+      render: () => <ApiBaseUrlInfo />,
+    },
+    PRODUCT_SECTION: {
+      type: "custom",
+      render: () => <div className="text-xs font-bold text-gray-500 mt-4 mb-1 uppercase">Product Selection</div>,
+    },
+    productId: {
+      type: "custom",
+      label: "PRODUCT SEARCH/SELECT",
+      render: ({ value, onChange, id }) => (
+        <ProductSelector value={value} onChange={onChange} id={id} />
+      )
+    },
+    allowedVariants: {
+      type: "custom",
+      label: "SELECT VARIANT NAME",
+      render: ({ value, onChange, id }) => (
+        <VariantSelector value={value} onChange={onChange} id={id} />
+      )
+    },
+    UI_SECTION: {
+      type: "custom",
+      render: () => <div className="text-xs font-bold text-gray-500 mt-4 mb-1 uppercase">UI Configuration</div>,
+    },
+    title: { type: "text", label: "TITLE" },
+    description: { type: "textarea", label: "DESCRIPTION" },
+    submitButtonText: { type: "text", label: "SUBMIT BUTTON TEXT" },
+    productImage: {
+      type: "custom",
+      render: ({ value, onChange }) => <ImageUpload value={value} onChange={onChange} />,
+      label: "PRODUCT IMAGE"
+    },
+    productImageAlt: { type: "text", label: "PRODUCT IMAGE ALT" },
+    productName: { type: "text", label: "PRODUCT NAME" },
+    productPrice: { type: "text", label: "PRODUCT PRICE" },
+    shippingOptions: {
+      type: "array",
+      label: "SHIPPING OPTIONS",
+      getItemSummary: (item, index) => item.label || `Option ${(index || 0) + 1}`,
+      arrayFields: {
+        id: { type: "text", label: "ID" },
+        label: { type: "text", label: "LABEL" },
+        price: { type: "number", label: "PRICE" },
+      },
+    },
+    namePlaceholder: { type: "text", label: "NAME PLACEHOLDER" },
+    phonePlaceholder: { type: "text", label: "PHONE PLACEHOLDER" },
+    addressPlaceholder: { type: "textarea", label: "ADDRESS PLACEHOLDER" },
+    notesPlaceholder: { type: "text", label: "NOTES PLACEHOLDER" },
+    cashOnDeliveryText: { type: "text", label: "CASH ON DELIVERY TEXT" },
+    privacyPolicyUrl: { type: "text", label: "PRIVACY POLICY URL" },
+    primaryColor: { type: "text", label: "PRIMARY COLOR" },
+    textColor: { type: "text", label: "TEXT COLOR" },
+    backgroundColor: { type: "text", label: "BACKGROUND COLOR" },
+  },
+  defaultProps: {
+    apiBaseUrl: "",
+    productId: process.env.NEXT_PUBLIC_PRODUCT_ID || "3",
+    allowedVariants: [],
+    title: "Stock সীমিত – আজই অর্ডার করুন!",
+    description: "অর্ডার করতে নীচের ফর্মটি পূরণ করুন এবং অর্ডার করুন বাটনে ক্লিক করুন!",
+    submitButtonText: "অর্ডার কনফার্ম করুন",
+    productImage: productImageSrc,
+    productImageAlt: "Premium Quality Panjabi",
+    productName: "প্রিমিয়াম Quality Panjabi",
+    productPrice: "৳1499",
+    shippingOptions: [
+      { id: "dhaka_city", label: "ঢাকা শহর", price: 70 },
+      { id: "dhaka_suburbs", label: "ঢাকার আশেপাশের এলাকা", price: 100 },
+      { id: "outside_dhaka", label: "ঢাকার বাইরে", price: 130 },
+    ],
+    namePlaceholder: "আপনার নাম",
+    phonePlaceholder: "+8801 XXX XXXXXX",
+    addressPlaceholder: "আপনার ঠিকানা",
+    notesPlaceholder: "লিখুন",
+    cashOnDeliveryText: "Cash on delivery. We prioritizing frictionless payments",
+    privacyPolicyUrl: "/privacy-policy",
+    primaryColor: "#F36621",
+    textColor: "#27272a",
+    backgroundColor: "#f3e8ff",
+  },
+  render: (props) => <OrderFormUI {...props} />,
+};
