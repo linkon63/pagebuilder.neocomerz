@@ -263,7 +263,7 @@ const VariantSelector = ({ value, onChange, id }: any) => {
            availableVariantNames.add(sizeLabel);
          }
       }
-    });5
+    });
     
     const pSizes = getSizesArray(product.sizes);
     if (pSizes.length > 0) {
@@ -426,9 +426,27 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
     notesPlaceholder: { type: "text", label: "NOTES PLACEHOLDER" },
     cashOnDeliveryText: { type: "text", label: "CASH ON DELIVERY TEXT" },
     privacyPolicyUrl: { type: "text", label: "PRIVACY POLICY URL" },
-    primaryColor: { type: "text", label: "PRIMARY COLOR" },
-    textColor: { type: "text", label: "TEXT COLOR" },
-    backgroundColor: { type: "text", label: "BACKGROUND COLOR" },
+    primaryColor: {
+      type: "custom", label: "PRIMARY COLOR",
+      render: ({ value, onChange }) => {
+        const { ColorPicker } = require("../../components/ColorPicker");
+        return <ColorPicker label="Primary Color" value={value || "#F36621"} onChange={onChange} />;
+      },
+    },
+    textColor: {
+      type: "custom", label: "TEXT COLOR",
+      render: ({ value, onChange }) => {
+        const { ColorPicker } = require("../../components/ColorPicker");
+        return <ColorPicker label="Text Color" value={value || "#27272a"} onChange={onChange} />;
+      },
+    },
+    backgroundColor: {
+      type: "custom", label: "BACKGROUND COLOR",
+      render: ({ value, onChange }) => {
+        const { ColorPicker } = require("../../components/ColorPicker");
+        return <ColorPicker label="Background Color" value={value || "#f3e8ff"} onChange={onChange} />;
+      },
+    },
   },
   defaultProps: {
     apiBaseUrl: "",

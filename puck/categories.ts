@@ -3,47 +3,56 @@ import { PuckProps } from "./types/puck";
 
 export const categories: Config<PuckProps>["categories"] = {
   LAYOUT: {
-    title: "LAYOUT Components",
+    title: "Layout",
     components: ["Container", "Columns"],
   },
 
   CONTENT: {
-    title: "CONTENT Components",
-    components: ["Heading", "Text", "Button", "FAQ"],
+    title: "Content",
+    components: ["Heading", "Text", "Button"],
   },
 
-  PREBUILT: {
-    title: "HERO Components",
-    components: ["Hero", "LayeredHero", "InlineHero"],
-  },
-
-  FEATURES: {
-    title: "FEATURES Components",
-    components: ["Features"],
-  },
-
-  QUALITY: {
-    title: "QUALITY Components",
-    components: ["DesignAndFit"],
+  HERO: {
+    title: "Hero Sections",
+    // Fashion/Apparel: Hero (multi-style), LayeredHero, InlineHero
+    // Organic/Food: Hero2 (Organic), Hero3 (Circle Focus), Hero4 (Cinematic)
+    components: [
+      "Hero",
+      "LayeredHero",
+      "InlineHero",
+      "Hero2",
+      "Hero3",
+      "Hero4",
+    ],
   },
 
   GALLERY: {
-    title: "GALLERY Components",
+    title: "Gallery",
     components: ["GalleryCol", "GalleryGrid", "GalleryGrid6"],
   },
 
+  FEATURES: {
+    title: "Features",
+    components: ["Features"],
+  },
+
+  DESIGN: {
+    title: "Design & Quality",
+    components: ["DesignAndFit", "Quality"],
+  },
+
   SIZING: {
-    title: "SIZING Components",
+    title: "Sizing",
     components: ["SizeChart"],
   },
 
   COMMERCE: {
-    title: "COMMERCE Components",
+    title: "Commerce",
     components: ["OrderForm"],
   },
 
-  REVIEWS: {
-    title: "REVIEWS Components",
-    components: ["Testimonials"],
+  SOCIAL_PROOF: {
+    title: "Social Proof",
+    components: ["Testimonials", "FAQ"],
   },
 };

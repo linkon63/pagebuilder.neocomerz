@@ -1,39 +1,46 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "@/puck/types/puck";
 import { ImageUpload } from "@/components/ImageUpload";
+import { VersionPicker, GallerySkeletons } from "@/components/VersionPicker";
 import { GalleryGridUI } from "neocomerz-storefront-ui";
+
+const VERSION_OPTIONS = [
+  { value: "default", label: "Default", description: "Featured 2x2 + grid",       preview: GallerySkeletons.grid },
+  { value: "v1",      label: "v1",      description: "Left-aligned featured grid", preview: GallerySkeletons.grid },
+  { value: "v2",      label: "v2",      description: "Uniform grid layout",        preview: GallerySkeletons.grid6 },
+  { value: "v3",      label: "v3",      description: "Masonry style",              preview: GallerySkeletons.col },
+  { value: "v4",      label: "v4",      description: "Dark overlay grid",          preview: GallerySkeletons.grid },
+  { value: "v5",      label: "v5",      description: "Rounded card grid",          preview: GallerySkeletons.grid },
+];
 
 export const GalleryGrid: ComponentConfig<PuckProps["GalleryGrid"]> = {
   label: "Gallery Grid (9 Pack)",
   fields: {
-    title: { type: "text", label: "Title" },
-    description: { type: "textarea", label: "Description" },
+    version: {
+      type: "custom", label: "LAYOUT VERSION",
+      render: ({ value, onChange }) => (
+        <VersionPicker value={value || "default"} onChange={(v) => onChange(v as any)} options={VERSION_OPTIONS} />
+      ),
+    },
+    title:       { type: "text",     label: "TITLE" },
+    description: { type: "textarea", label: "DESCRIPTION" },
     images: {
-      label: "Images (Max 9)",
-      type: "array",
+      type: "array", label: "IMAGES (max 9)",
       getItemSummary: (item: any) => item.alt || "Image",
       arrayFields: {
         src: {
-          label: "Image",
-          type: "custom",
-          render: ({ value, onChange }: any) => (
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Image</label>
-              <ImageUpload value={value} onChange={onChange} />
-            </div>
-          ),
+          type: "custom", label: "IMAGE",
+          render: ({ value, onChange }: any) => <ImageUpload value={value} onChange={onChange} />,
         },
-        alt: { type: "text", label: "Alt Text" },
+        alt: { type: "text", label: "ALT TEXT" },
       },
-      defaultItemProps: {
-        src: "",
-        alt: "",
-      },
+      defaultItemProps: { src: "", alt: "" },
     },
   },
   defaultProps: {
+    version: "default",
     title: "Curated Collection",
-    description: "Explore our visually stunning grid of premium products and lifestyle shots.",
+    description: "Explore our visually stunning grid of premium products.",
     images: [
       { src: "/ui-images/products/product1.webp", alt: "Featured" },
       { src: "/ui-images/products/product2.webp", alt: "Product 1" },
@@ -42,7 +49,5 @@ export const GalleryGrid: ComponentConfig<PuckProps["GalleryGrid"]> = {
       { src: "/ui-images/products/product5.webp", alt: "Product 4" },
     ],
   },
-  render: (props: any) => {
-    return <GalleryGridUI {...props} />;
-  },
+  render: (props: any) => <GalleryGridUI {...props} />,
 };

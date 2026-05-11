@@ -1,37 +1,44 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "@/puck/types/puck";
 import { ImageUpload } from "@/components/ImageUpload";
+import { VersionPicker, GallerySkeletons } from "@/components/VersionPicker";
 import { GalleryColUI } from "neocomerz-storefront-ui";
+
+const VERSION_OPTIONS = [
+  { value: "default", label: "Default", description: "4-col equal grid",          preview: GallerySkeletons.col },
+  { value: "v1",      label: "v1",      description: "Left-aligned title + grid", preview: GallerySkeletons.col },
+  { value: "v2",      label: "v2",      description: "Masonry column layout",     preview: GallerySkeletons.col },
+  { value: "v3",      label: "v3",      description: "Overlay hover effect",      preview: GallerySkeletons.col },
+  { value: "v4",      label: "v4",      description: "Dark background grid",      preview: GallerySkeletons.col },
+  { value: "v5",      label: "v5",      description: "Rounded card style",        preview: GallerySkeletons.col },
+];
 
 export const GalleryCol: ComponentConfig<PuckProps["GalleryCol"]> = {
   label: "Gallery Column",
   fields: {
-    title: { type: "text", label: "Title" },
-    description: { type: "textarea", label: "Description" },
+    version: {
+      type: "custom", label: "LAYOUT VERSION",
+      render: ({ value, onChange }) => (
+        <VersionPicker value={value || "default"} onChange={(v) => onChange(v as any)} options={VERSION_OPTIONS} />
+      ),
+    },
+    title:       { type: "text",     label: "TITLE" },
+    description: { type: "textarea", label: "DESCRIPTION" },
     images: {
-      label: "Images (Max 4)",
-      type: "array",
+      type: "array", label: "IMAGES (max 4)",
       getItemSummary: (item: any) => item.alt || "Image",
       arrayFields: {
         src: {
-          label: "Image",
-          type: "custom",
-          render: ({ value, onChange }: any) => (
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Image</label>
-              <ImageUpload value={value} onChange={onChange} />
-            </div>
-          ),
+          type: "custom", label: "IMAGE",
+          render: ({ value, onChange }: any) => <ImageUpload value={value} onChange={onChange} />,
         },
-        alt: { type: "text", label: "Alt Text" },
+        alt: { type: "text", label: "ALT TEXT" },
       },
-      defaultItemProps: {
-        src: "",
-        alt: "",
-      },
+      defaultItemProps: { src: "", alt: "" },
     },
   },
   defaultProps: {
+    version: "default",
     title: "Our Product Gallery",
     description: "Check out our latest collection and high-quality product images.",
     images: [
@@ -41,7 +48,5 @@ export const GalleryCol: ComponentConfig<PuckProps["GalleryCol"]> = {
       { src: "/ui-images/products/product4.webp", alt: "Product 4" },
     ],
   },
-  render: (props: any) => {
-    return <GalleryColUI {...props} />;
-  },
+  render: (props: any) => <GalleryColUI {...props} />,
 };

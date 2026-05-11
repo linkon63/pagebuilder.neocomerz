@@ -1,103 +1,103 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
+import { ColorPicker } from "../../components/ColorPicker";
+import { VersionPicker, HeroSkeletons } from "../../components/VersionPicker";
 import { LayeredHeroUI } from "neocomerz-storefront-ui";
 
+const VERSION_OPTIONS = [
+  { value: "default", label: "Layered",   description: "Classic split with polaroid overlay", preview: HeroSkeletons.organic },
+  { value: "v2",      label: "Bold",      description: "Large text + full image right",       preview: HeroSkeletons.cinematic },
+  { value: "v3",      label: "Centered",  description: "Centered layout with overlay",        preview: HeroSkeletons.classic },
+  { value: "v4",      label: "Dark",      description: "Dark premium theme",                  preview: HeroSkeletons.urgency },
+  { value: "v5",      label: "Minimal",   description: "Clean split, no decorations",         preview: HeroSkeletons.splitPanel },
+];
+
 export const LayeredHero: ComponentConfig<PuckProps["LayeredHero"]> = {
-  label: "Layered Hero",
+  label: "Hero — Layered / Split",
   fields: {
-    mainImage: {
-      label: "Main Hero Image",
-      type: "custom",
+    version: {
+      type: "custom", label: "LAYOUT VERSION",
       render: ({ value, onChange }) => (
-        <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Main Hero Image</label>
-          <ImageUpload value={value} onChange={onChange} />
-        </div>
-      )
+        <VersionPicker value={value || "default"} onChange={(v) => onChange(v as any)} options={VERSION_OPTIONS} />
+      ),
+    },
+    mainImage: {
+      type: "custom", label: "MAIN HERO IMAGE",
+      render: ({ value, onChange }) => <ImageUpload value={value} onChange={onChange} />,
     },
     logoSrc: {
-      label: "Logo Image",
-      type: "custom",
-      render: ({ value, onChange }) => (
-        <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Logo Image</label>
-          <ImageUpload value={value} onChange={onChange} />
-        </div>
-      )
+      type: "custom", label: "LOGO",
+      render: ({ value, onChange }) => <ImageUpload value={value} onChange={onChange} />,
     },
-    logoAlt: { label: "Logo Alt Text", type: "text" },
+    logoAlt: { type: "text", label: "LOGO ALT" },
     overlayImage: {
-      label: "Polaroid Overlay Image",
-      type: "custom",
-      render: ({ value, onChange }) => (
-        <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Polaroid Overlay Image</label>
-          <ImageUpload value={value} onChange={onChange} />
-        </div>
-      )
+      type: "custom", label: "POLAROID OVERLAY IMAGE",
+      render: ({ value, onChange }) => <ImageUpload value={value} onChange={onChange} />,
     },
     shadowImage: {
-      label: "Left Shadow Image",
-      type: "custom",
-      render: ({ value, onChange }) => (
-        <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Left Shadow Image</label>
-          <ImageUpload value={value} onChange={onChange} />
-        </div>
-      )
+      type: "custom", label: "LEFT SHADOW IMAGE",
+      render: ({ value, onChange }) => <ImageUpload value={value} onChange={onChange} />,
     },
-    watermarkText: { label: "Watermark Text", type: "text" },
-    titlePrimary: { label: "Primary Title (Yellow)", type: "text" },
-    titleSecondary: { label: "Secondary Title (Black)", type: "text" },
-    description: { label: "Description Text", type: "textarea" },
-    productName: { label: "Product Name", type: "text" },
-    originalPrice: { label: "Original Price", type: "text" },
-    discountPrice: { label: "Discount Price", type: "text" },
-    ctaText: { label: "Main CTA Text", type: "text" },
-    ctaHref: { label: "Main CTA Link", type: "text" },
-    showWatermark: { label: "Show Watermark", type: "radio", options: [{ label: "Yes", value: true }, { label: "No", value: false }] },
-    showShadow: { label: "Show Left Shadow", type: "radio", options: [{ label: "Yes", value: true }, { label: "No", value: false }] },
-    showPolaroid: { label: "Show Polaroid", type: "radio", options: [{ label: "Yes", value: true }, { label: "No", value: false }] },
-    primaryColor: { label: "Primary Theme Color", type: "text" },
-    textColor: { label: "Text Theme Color", type: "text" },
-    descriptionColor: { label: "Description Color", type: "text" },
-    priceSuffix: { label: "Price Suffix Text", type: "text" },
-    showCtaIcon: { label: "Show CTA Icon", type: "radio", options: [{ label: "Yes", value: true }, { label: "No", value: false }] },
+    watermarkText:  { type: "text",     label: "WATERMARK TEXT" },
+    titlePrimary:   { type: "text",     label: "TITLE PRIMARY" },
+    titleSecondary: { type: "text",     label: "TITLE SECONDARY" },
+    description:    { type: "textarea", label: "DESCRIPTION" },
+    productName:    { type: "text",     label: "PRODUCT NAME" },
+    originalPrice:  { type: "text",     label: "ORIGINAL PRICE" },
+    discountPrice:  { type: "text",     label: "DISCOUNT PRICE" },
+    priceSuffix:    { type: "text",     label: "PRICE SUFFIX" },
+    ctaText:        { type: "text",     label: "CTA TEXT" },
+    ctaHref:        { type: "text",     label: "CTA HREF" },
+    showWatermark: { type: "radio", label: "SHOW WATERMARK", options: [{ label: "Yes", value: true }, { label: "No", value: false }] },
+    showShadow:    { type: "radio", label: "SHOW SHADOW",    options: [{ label: "Yes", value: true }, { label: "No", value: false }] },
+    showPolaroid:  { type: "radio", label: "SHOW POLAROID",  options: [{ label: "Yes", value: true }, { label: "No", value: false }] },
+    showCtaIcon:   { type: "radio", label: "SHOW CTA ICON",  options: [{ label: "Yes", value: true }, { label: "No", value: false }] },
+    primaryColor: {
+      type: "custom", label: "PRIMARY COLOR",
+      render: ({ value, onChange }) => <ColorPicker label="Primary Color" value={value || "#FBBF24"} onChange={onChange} />,
+    },
+    textColor: {
+      type: "custom", label: "TEXT COLOR",
+      render: ({ value, onChange }) => <ColorPicker label="Text Color" value={value || "#222F28"} onChange={onChange} />,
+    },
+    descriptionColor: {
+      type: "custom", label: "DESCRIPTION COLOR",
+      render: ({ value, onChange }) => <ColorPicker label="Description Color" value={value || "#6B6B6B"} onChange={onChange} />,
+    },
   },
   defaultProps: {
+    version: "default",
     mainImage: "/ui-images/hero-2/hero-main.webp",
     logoSrc: "/ui-images/hero-2/Logo.svg",
     overlayImage: "/ui-images/hero-2/hero-overlay.webp",
     shadowImage: "/ui-images/hero-2/left-shadow.webp",
-    logoAlt: "Logo image",
+    logoAlt: "Logo",
     watermarkText: "Shirt",
     titlePrimary: "এই শীতের",
     titleSecondary: "স্টাইল গেমে আনুন নতুনত্ব",
-    description: "শীত এলেই শুরু হয় স্টাইলের নতুন অধ্যায়। এত কম দামে প্রিমিয়াম কোয়ালিটি Sweatshirt and Pant। এই শীতের স্টাইল গেমে আনুন নতুনত্ব। বাজেট ফ্রেন্ডলি প্রাইসে পাচ্ছেন আমাদের এক্সক্লুসিভ প্রিমিয়াম Sweatshirt Collection - যা আপনার লুককে করবে আরো স্টাইলিশ ও আকর্ষনীয়।",
+    description: "বাজেট ফ্রেন্ডলি প্রাইসে পাচ্ছেন আমাদের এক্সক্লুসিভ প্রিমিয়াম Sweatshirt Collection।",
     productName: "Sweat Shirt Set",
     originalPrice: "৳1427",
     discountPrice: "৳999",
+    priceSuffix: "only",
     ctaText: "অর্ডার করুন (৩০% ছাড়ে)",
     ctaHref: "#order",
     showWatermark: true,
     showShadow: true,
     showPolaroid: true,
+    showCtaIcon: true,
     primaryColor: "#FBBF24",
     textColor: "#222F28",
     descriptionColor: "#6B6B6B",
-    priceSuffix: "only",
-    showCtaIcon: true,
   },
   render: (props) => (
     <LayeredHeroUI
+      version={props.version}
       mainImage={props.mainImage}
       overlayImage={props.overlayImage}
       shadowImage={props.shadowImage}
-      logo={{
-        src: props.logoSrc,
-        alt: props.logoAlt,
-      }}
+      logo={{ src: props.logoSrc, alt: props.logoAlt }}
       watermarkText={props.watermarkText}
       titlePrimary={props.titlePrimary}
       titleSecondary={props.titleSecondary}
@@ -106,21 +106,9 @@ export const LayeredHero: ComponentConfig<PuckProps["LayeredHero"]> = {
       originalPrice={props.originalPrice}
       discountPrice={props.discountPrice}
       priceSuffix={props.priceSuffix}
-      cta={{
-        text: props.ctaText,
-        href: props.ctaHref,
-      }}
-      settings={{
-        showWatermark: props.showWatermark,
-        showShadow: props.showShadow,
-        showPolaroid: props.showPolaroid,
-        showCtaIcon: props.showCtaIcon,
-      }}
-      theme={{
-        primaryColor: props.primaryColor,
-        textColor: props.textColor,
-        descriptionColor: props.descriptionColor,
-      }}
+      cta={{ text: props.ctaText, href: props.ctaHref }}
+      settings={{ showWatermark: props.showWatermark, showShadow: props.showShadow, showPolaroid: props.showPolaroid, showCtaIcon: props.showCtaIcon }}
+      theme={{ primaryColor: props.primaryColor, textColor: props.textColor, descriptionColor: props.descriptionColor }}
     />
   ),
 };

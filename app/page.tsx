@@ -1,12 +1,22 @@
-import BuilderApp from "./BuilderApp";
-import { getBuilderSession } from "@/lib/builder-session";
+import BuilderAppClient from "./BuilderAppClient";
+import { getBuilderSession, type BuilderSession } from "@/lib/builder-session";
+// ─── Dev bypass ──────────────────────────────────────────────────────────────
+const DEV_SESSION: BuilderSession = {
+  token: "dev-token",
+  tenantBaseUrl: "http://localhost:3000",
+  tenantApiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000",
+  user: { id: 1, name: "Dev User", email: "dev@neocomerz.com" },
+  tenant: { id: "dev", businessName: "NeoComerz (Dev)" },
+};
+// ─────────────────────────────────────────────────────────────────────────────
 
 export default async function Home({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string | string[] }>;
 }) {
-  const session = await getBuilderSession();
+  const isDev = process.env.NODE_ENV === "development";
+  const session = isDev ? DEV_SESSION : await getBuilderSession();
   const params = await searchParams;
 
   if (!session) {
@@ -30,7 +40,7 @@ export default async function Home({
   }
 
   return (
-    <BuilderApp
+    <BuilderAppClient
       session={session}
       previewBaseUrl={
         process.env.NEXT_PUBLIC_LANDING_PAGE_PREVIEW_BASE_URL || "http://localhost:3001"
