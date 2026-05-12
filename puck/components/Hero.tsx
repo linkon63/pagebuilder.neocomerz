@@ -14,7 +14,7 @@ const VERSION_OPTIONS = [
   { value: "v5",      label: "Minimal",   description: "Clean text overlay, no card",      preview: HeroSkeletons.classic },
 ];
 
-export const Hero: ComponentConfig<PuckProps["Hero"]> = {
+export const Hero: ComponentConfig<any> = {
   label: "Hero — Fashion / Apparel",
   fields: {
     version: {
@@ -85,5 +85,5 @@ export const Hero: ComponentConfig<PuckProps["Hero"]> = {
     primaryColor: "#F36621",
     textColor: "#222F28",
   },
-  render: (props) => <HeroUI {...props} />,
+  render: (props: any) => <HeroUI {...props} />,
 };

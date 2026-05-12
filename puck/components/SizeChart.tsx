@@ -3,7 +3,7 @@ import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
 import { ColorPicker } from "../../components/ColorPicker";
 import { VersionPicker, SizeChartSkeletons } from "../../components/VersionPicker";
-import { SizeChartUI } from "neocomerz-storefront-ui";
+import { SizeChart as SizeChartUI } from "neocomerz-storefront-ui";
 
 const VERSION_OPTIONS = [
   { value: "default", label: "Default", description: "Table + image + policy bar", preview: SizeChartSkeletons.default },
@@ -14,7 +14,7 @@ const VERSION_OPTIONS = [
   { value: "v5",      label: "v5",      description: "Split 2-col layout",         preview: SizeChartSkeletons.v5 },
 ];
 
-export const SizeChart: ComponentConfig<PuckProps["SizeChart"]> = {
+export const SizeChart: ComponentConfig<any> = {
   label: "Size Chart",
   fields: {
     version: {
@@ -77,5 +77,5 @@ export const SizeChart: ComponentConfig<PuckProps["SizeChart"]> = {
     textColor: "#27272a",
     backgroundColor: "#ffffff",
   },
-  render: (props) => <SizeChartUI {...props} />,
+  render: (props: any) => <SizeChartUI {...props} />,
 };

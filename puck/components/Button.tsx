@@ -2,7 +2,7 @@ import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ColorPicker } from "../../components/ColorPicker";
 
-export const Button: ComponentConfig<PuckProps["Button"]> = {
+export const Button: ComponentConfig<any> = {
   label: "Button",
   fields: {
     text: { type: "text", label: "TEXT" },

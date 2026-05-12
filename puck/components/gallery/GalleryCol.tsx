@@ -2,7 +2,7 @@ import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "@/puck/types/puck";
 import { ImageUpload } from "@/components/ImageUpload";
 import { VersionPicker, GallerySkeletons } from "@/components/VersionPicker";
-import { GalleryColUI } from "neocomerz-storefront-ui";
+import { GalleryCol as GalleryColUI } from "neocomerz-storefront-ui";
 
 const VERSION_OPTIONS = [
   { value: "default", label: "Default", description: "4-col equal grid",          preview: GallerySkeletons.col },
@@ -13,7 +13,7 @@ const VERSION_OPTIONS = [
   { value: "v5",      label: "v5",      description: "Rounded card style",        preview: GallerySkeletons.col },
 ];
 
-export const GalleryCol: ComponentConfig<PuckProps["GalleryCol"]> = {
+export const GalleryCol: ComponentConfig<any> = {
   label: "Gallery Column",
   fields: {
     version: {

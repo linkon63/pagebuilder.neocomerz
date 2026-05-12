@@ -1,7 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import { DesignAndFitUI } from "neocomerz-storefront-ui";
+import { DesignAndFit as DesignAndFitUI } from "neocomerz-storefront-ui";
 import { VersionPicker, DesignAndFitSkeletons } from "../../components/VersionPicker";
 import { ColorPicker } from "../../components/ColorPicker";
 
@@ -13,7 +13,7 @@ const VERSION_OPTIONS = [
   { value: "v5", label: "Overlap", description: "Overlapping image cards",           preview: DesignAndFitSkeletons.v5 },
 ];
 
-export const DesignAndFit: ComponentConfig<PuckProps["DesignAndFit"]> = {
+export const DesignAndFit: ComponentConfig<any> = {
   label: "Design & Fit Section",
   fields: {
     version: {

@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import { QualityUI } from "neocomerz-storefront-ui";
+import { Quality as QualityUI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 import { VersionPicker, QualitySkeletons } from "../../components/VersionPicker";
 import { ColorPicker } from "../../components/ColorPicker";
@@ -13,7 +13,7 @@ const VERSION_OPTIONS = [
   { value: "v5", label: "Overlap",  description: "Overlapping image cards",         preview: QualitySkeletons.v5 },
 ];
 
-export const Quality: ComponentConfig<PuckProps["Quality"]> = {
+export const Quality: ComponentConfig<any> = {
   label: "Quality Section",
   fields: {
     version: {

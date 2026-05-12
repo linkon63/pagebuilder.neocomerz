@@ -1,7 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 
-export const Heading: ComponentConfig<PuckProps["Heading"]> = {
+export const Heading: ComponentConfig<any> = {
   fields: {
     title: { type: "text" },
     level: {

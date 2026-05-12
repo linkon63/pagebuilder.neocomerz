@@ -3,7 +3,7 @@ import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
 import { ColorPicker } from "../../components/ColorPicker";
 import { VersionPicker, HeroSkeletons } from "../../components/VersionPicker";
-import { InlineHeroUI } from "neocomerz-storefront-ui";
+import { InlineHero as InlineHeroUI } from "neocomerz-storefront-ui";
 
 const VERSION_OPTIONS = [
   { value: "default", label: "Classic",  description: "Full-width bg, text left aligned",  preview: HeroSkeletons.organic },
@@ -13,7 +13,7 @@ const VERSION_OPTIONS = [
   { value: "v5",      label: "Minimal",  description: "Clean inline, no background",       preview: HeroSkeletons.splitPanel },
 ];
 
-export const InlineHero: ComponentConfig<PuckProps["InlineHero"]> = {
+export const InlineHero: ComponentConfig<any> = {
   label: "Hero — Inline / Full Width",
   fields: {
     version: {

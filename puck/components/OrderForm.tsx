@@ -3,7 +3,7 @@ import { ComponentConfig, usePuck } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
 import { useBuilderSession } from "@/components/BuilderSessionProvider";
-import { OrderFormUI } from "neocomerz-storefront-ui";
+import { OrderForm as OrderFormUI } from "neocomerz-storefront-ui";
 import { FiChevronDown, FiSearch, FiCheck } from "react-icons/fi";
 import { getLocalizedString, getSizesArray, getVariantDisplayValues, getDynamicSizeLabel } from "@/ui-package/OrderFormHelpers";
 
@@ -366,7 +366,7 @@ const VariantSelector = ({ value, onChange, id }: any) => {
   );
 };
 
-export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
+export const OrderForm: ComponentConfig<any> = {
   label: "Order Form Component",
   fields: {
     API_SECTION: {
@@ -474,5 +474,5 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
     textColor: "#27272a",
     backgroundColor: "#f3e8ff",
   },
-  render: (props) => <OrderFormUI {...props} />,
+  render: (props: any) => <OrderFormUI {...props} />,
 };

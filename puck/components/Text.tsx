@@ -1,7 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 
-export const Text: ComponentConfig<PuckProps["Text"]> = {
+export const Text: ComponentConfig<any> = {
   fields: {
     content: { type: "textarea" },
     color: { type: "text" },

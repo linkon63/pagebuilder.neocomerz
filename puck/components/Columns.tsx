@@ -1,7 +1,7 @@
 import { ComponentConfig, DropZone } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 
-export const Columns: ComponentConfig<PuckProps["Columns"]> = {
+export const Columns: ComponentConfig<any> = {
   fields: {
     columns: {
       type: "array",
@@ -13,7 +13,7 @@ export const Columns: ComponentConfig<PuckProps["Columns"]> = {
   },
   render: ({ columns = [{ children: null }, { children: null }] }) => (
     <div style={{ display: "grid", gridTemplateColumns: `repeat(${columns.length}, 1fr)`, gap: "1.5rem" }}>
-      {columns.map((_, i) => (
+      {columns.map((_: any, i: number) => (
         <div key={i}>
           <DropZone zone={`column-${i}`} />
         </div>

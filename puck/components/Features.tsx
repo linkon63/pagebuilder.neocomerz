@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import { FeaturesUI } from "neocomerz-storefront-ui";
+import { Features as FeaturesUI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 import { VersionPicker, FeaturesSkeletons } from "../../components/VersionPicker";
 import { ColorPicker } from "../../components/ColorPicker";
@@ -20,7 +20,7 @@ const VERSION_OPTIONS = [
   { value: "v5", label: "Collage",   description: "Overlapping image collage",               preview: FeaturesSkeletons.v5 },
 ];
 
-export const Features: ComponentConfig<PuckProps["Features"]> = {
+export const Features: ComponentConfig<any> = {
   label: "Features Section",
   fields: {
     version: {
@@ -89,7 +89,7 @@ export const Features: ComponentConfig<PuckProps["Features"]> = {
       description={props.description}
       tagline={withFallback(props.tagline, DEFAULT_TAGLINE)}
       features={props.features || []}
-      images={props.images?.length ? props.images.map((img) => ({ src: img.src || "", alt: img.alt || "" })) : undefined}
+      images={props.images?.length ? props.images.map((img: any) => ({ src: img.src || "", alt: img.alt || "" })) : undefined}
       ctaButton={{ text: withFallback(props.ctaText, DEFAULT_CTA_TEXT), href: withFallback(props.ctaHref, DEFAULT_CTA_HREF) }}
       whatsappNumber={props.whatsappNumber}
       colors={{ primary: props.primaryColor, text: props.textColor, background: props.backgroundColor }}

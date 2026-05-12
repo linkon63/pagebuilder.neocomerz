@@ -3,7 +3,7 @@ import { PuckProps } from "../types/puck";
 import { Hero3 as Hero3UI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 
-export const Hero3: ComponentConfig<PuckProps["Hero3"]> = {
+export const Hero3: ComponentConfig<any> = {
   label: "Hero — Circle Focus",
   fields: {
     logoSrc: {

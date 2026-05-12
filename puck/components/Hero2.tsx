@@ -3,7 +3,7 @@ import { PuckProps } from "../types/puck";
 import { Hero2 as Hero2UI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 
-export const Hero2: ComponentConfig<PuckProps["Hero2"]> = {
+export const Hero2: ComponentConfig<any> = {
   label: "Hero — Organic / Nature",
   fields: {
     backgroundImage: {

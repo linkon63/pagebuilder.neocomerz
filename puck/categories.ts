@@ -14,21 +14,7 @@ export const categories: Config<PuckProps>["categories"] = {
 
   HERO: {
     title: "Hero Sections",
-    // Fashion/Apparel: Hero (multi-style), LayeredHero, InlineHero
-    // Organic/Food: Hero2 (Organic), Hero3 (Circle Focus), Hero4 (Cinematic)
-    components: [
-      "Hero",
-      "LayeredHero",
-      "InlineHero",
-      "Hero2",
-      "Hero3",
-      "Hero4",
-    ],
-  },
-
-  GALLERY: {
-    title: "Gallery",
-    components: ["GalleryCol", "GalleryGrid", "GalleryGrid6"],
+    components: ["Hero", "LayeredHero", "InlineHero", "Hero2", "Hero3", "Hero4"],
   },
 
   FEATURES: {
@@ -36,14 +22,24 @@ export const categories: Config<PuckProps>["categories"] = {
     components: ["Features"],
   },
 
-  DESIGN: {
+  QUALITY: {
     title: "Design & Quality",
     components: ["DesignAndFit", "Quality"],
   },
 
+  GALLERY: {
+    title: "Gallery",
+    components: ["GalleryCol", "GalleryGrid", "GalleryGrid6"],
+  },
+
   SIZING: {
-    title: "Sizing",
+    title: "Size Chart",
     components: ["SizeChart"],
+  },
+
+  REVIEWS: {
+    title: "Reviews & FAQ",
+    components: ["Testimonials", "FAQ"],
   },
 
   COMMERCE: {
@@ -51,8 +47,8 @@ export const categories: Config<PuckProps>["categories"] = {
     components: ["OrderForm"],
   },
 
-  SOCIAL_PROOF: {
-    title: "Social Proof",
-    components: ["Testimonials", "FAQ"],
+  ELEMENTS: {
+    title: "UI Elements",
+    components: ["CheckListItem", "SectionHeader", "Helpline"],
   },
 };

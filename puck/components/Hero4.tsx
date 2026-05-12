@@ -3,7 +3,7 @@ import { PuckProps } from "../types/puck";
 import { Hero4 as Hero4UI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 
-export const Hero4: ComponentConfig<PuckProps["Hero4"]> = {
+export const Hero4: ComponentConfig<any> = {
   label: "Hero — Cinematic",
   fields: {
     leftLeafImage: {

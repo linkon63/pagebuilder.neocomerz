@@ -3,7 +3,7 @@ import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
 import { ColorPicker } from "../../components/ColorPicker";
 import { VersionPicker, HeroSkeletons } from "../../components/VersionPicker";
-import { LayeredHeroUI } from "neocomerz-storefront-ui";
+import { LayeredHero as LayeredHeroUI } from "neocomerz-storefront-ui";
 
 const VERSION_OPTIONS = [
   { value: "default", label: "Layered",   description: "Classic split with polaroid overlay", preview: HeroSkeletons.organic },
@@ -13,7 +13,7 @@ const VERSION_OPTIONS = [
   { value: "v5",      label: "Minimal",   description: "Clean split, no decorations",         preview: HeroSkeletons.splitPanel },
 ];
 
-export const LayeredHero: ComponentConfig<PuckProps["LayeredHero"]> = {
+export const LayeredHero: ComponentConfig<any> = {
   label: "Hero — Layered / Split",
   fields: {
     version: {

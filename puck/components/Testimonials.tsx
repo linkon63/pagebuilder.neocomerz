@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import { TestimonialsUI } from "neocomerz-storefront-ui";
+import { Testimonials as TestimonialsUI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 import { ColorPicker } from "../../components/ColorPicker";
 import { VersionPicker, TestimonialsSkeletons } from "../../components/VersionPicker";
@@ -14,7 +14,7 @@ const VERSION_OPTIONS = [
   { value: "v5",      label: "v5",      description: "Rounded card masonry",   preview: TestimonialsSkeletons.masonry },
 ];
 
-export const Testimonials: ComponentConfig<PuckProps["Testimonials"]> = {
+export const Testimonials: ComponentConfig<any> = {
   label: "Testimonials Section",
   fields: {
     version: {
@@ -75,7 +75,7 @@ export const Testimonials: ComponentConfig<PuckProps["Testimonials"]> = {
       version={props.version}
       title={props.title}
       description={props.description}
-      images={props.images?.length ? props.images.map((img) => ({ src: img.src || "", alt: img.alt || "" })) : []}
+      images={props.images?.length ? props.images.map((img: any) => ({ src: img.src || "", alt: img.alt || "" })) : []}
       initialDisplayCount={props.initialDisplayCount}
       loadMoreCount={props.loadMoreCount}
       loadMoreText={props.loadMoreText}

@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import { FAQUI } from "neocomerz-storefront-ui";
+import { FAQ as FAQUI } from "neocomerz-storefront-ui";
 import { ColorPicker } from "../../components/ColorPicker";
 import { VersionPicker, FAQSkeletons } from "../../components/VersionPicker";
 
@@ -13,7 +13,7 @@ const VERSION_OPTIONS = [
   { value: "v5",      label: "v5",      description: "2-col grid accordion",     preview: FAQSkeletons.v5 },
 ];
 
-export const FAQ: ComponentConfig<PuckProps["FAQ"]> = {
+export const FAQ: ComponentConfig<any> = {
   label: "FAQ Section",
   fields: {
     version: {
