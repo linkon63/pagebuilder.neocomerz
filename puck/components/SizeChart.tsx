@@ -3,7 +3,7 @@ import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
 import { ColorPicker } from "../../components/ColorPicker";
 import { VersionPicker, SizeChartSkeletons } from "../../components/VersionPicker";
-import { SizeChartUI } from "neocomerz-storefront-ui";
+import { SizeChart as SizeChartUI } from "neocomerz-storefront-ui";
 
 const VERSION_OPTIONS = [
   { value: "default", label: "Default", description: "Table + image + policy bar", preview: SizeChartSkeletons.default },

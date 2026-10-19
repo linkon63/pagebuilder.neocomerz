@@ -2,7 +2,7 @@ import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "@/puck/types/puck";
 import { ImageUpload } from "@/components/ImageUpload";
 import { VersionPicker, GallerySkeletons } from "@/components/VersionPicker";
-import { GalleryGrid6UI } from "neocomerz-storefront-ui";
+import { GalleryGrid6 as GalleryGrid6UI } from "neocomerz-storefront-ui";
 
 const VERSION_OPTIONS = [
   { value: "default", label: "Default", description: "Featured 2x2 + 4 grid",  preview: GallerySkeletons.grid6 },

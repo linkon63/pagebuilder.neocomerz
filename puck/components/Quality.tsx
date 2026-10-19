@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import { QualityUI } from "neocomerz-storefront-ui";
+import { Quality as QualityUI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 import { VersionPicker, QualitySkeletons } from "../../components/VersionPicker";
 import { ColorPicker } from "../../components/ColorPicker";

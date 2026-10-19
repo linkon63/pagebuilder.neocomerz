@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import { TestimonialsUI } from "neocomerz-storefront-ui";
+import { Testimonials as TestimonialsUI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 import { ColorPicker } from "../../components/ColorPicker";
 import { VersionPicker, TestimonialsSkeletons } from "../../components/VersionPicker";

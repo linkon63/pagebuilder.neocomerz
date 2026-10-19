@@ -146,5 +146,33 @@ export type PuckProps = {
     addressPlaceholder?: string; notesPlaceholder?: string;
     cashOnDeliveryText?: string; privacyPolicyUrl?: string;
     primaryColor?: string; textColor?: string; backgroundColor?: string;
+    confirmationSettings?: {
+      version?: "v1" | "v2" | "v3";
+      title?: string; message?: string; confirmedLabel?: string;
+      orderNumberLabel?: string; placedOnLabel?: string;
+      customerInformationLabel?: string; paymentLabel?: string;
+      amountDueLabel?: string; paymentStatusLabel?: string;
+      orderDetailsLabel?: string; quantityLabel?: string;
+      subtotalLabel?: string; deliveryLabel?: string; totalLabel?: string;
+      noItemsLabel?: string; missingNameLabel?: string;
+      missingPhoneLabel?: string; missingAddressLabel?: string;
+      printLabel?: string; continueShoppingLabel?: string; viewMoreLabel?: string;
+      brandName?: string; logoSrc?: string; viewMoreHref?: string;
+      primaryColor?: string; backgroundColor?: string; textColor?: string;
+    };
+  };
+  OrderConfirmation: {
+    version?: "v1" | "v2" | "v3";
+    title?: string; message?: string; confirmedLabel?: string;
+    orderNumberLabel?: string; placedOnLabel?: string;
+    customerInformationLabel?: string; paymentLabel?: string;
+    amountDueLabel?: string; paymentStatusLabel?: string;
+    orderDetailsLabel?: string; quantityLabel?: string;
+    subtotalLabel?: string; deliveryLabel?: string; totalLabel?: string;
+    noItemsLabel?: string; missingNameLabel?: string;
+    missingPhoneLabel?: string; missingAddressLabel?: string;
+    printLabel?: string; continueShoppingLabel?: string; viewMoreLabel?: string;
+    brandName?: string; logoSrc?: string; viewMoreHref?: string;
+    primaryColor?: string; backgroundColor?: string; textColor?: string;
   };
 };
