@@ -459,6 +459,55 @@ export const GallerySkeletons = {
   ),
 };
 
+export const OrderConfirmationSkeletons = {
+  v1: (
+    <svg width="80" height="52" viewBox="0 0 80 52" fill="none" aria-hidden="true">
+      <rect width="80" height="52" rx="4" fill="currentColor" fillOpacity="0.15" />
+      <rect x="7" y="3" width="66" height="46" rx="3" fill="white" stroke="currentColor" />
+      <R x={12} y={8} w={31} h={4} r={1} />
+      <R x={55} y={8} w={13} h={5} r={1} />
+      <R x={12} y={15} w={22} h={2} r={1} />
+      <rect x="12" y="21" width="26" height="9" rx="1" stroke="currentColor" />
+      <rect x="42" y="21" width="26" height="9" rx="1" stroke="currentColor" />
+      <R x={12} y={34} w={56} h={2} r={1} />
+      <R x={51} y={38} w={17} h={2} r={1} />
+      <R x={12} y={42} w={22} h={4} r={1} />
+      <R x={38} y={42} w={16} h={4} r={1} />
+    </svg>
+  ),
+  v2: (
+    <svg width="80" height="52" viewBox="0 0 80 52" fill="none" aria-hidden="true">
+      <rect width="80" height="52" rx="4" fill="currentColor" fillOpacity="0.15" />
+      <rect x="3" y="3" width="74" height="46" rx="5" fill="white" stroke="currentColor" />
+      <R x={7} y={7} w={66} h={13} r={3} />
+      <rect x="12" y="11" width="32" height="3" rx="1" fill="white" />
+      <rect x="12" y="16" width="22" height="1" fill="white" />
+      <g fill="currentColor" fillOpacity="0.25">
+        <rect x="7" y="24" width="31" height="10" rx="3" />
+        <rect x="42" y="24" width="31" height="10" rx="3" />
+      </g>
+      <R x={7} y={37} w={66} h={2} r={1} />
+      <R x={7} y={42} w={25} h={4} r={2} />
+      <R x={36} y={42} w={19} h={4} r={2} />
+    </svg>
+  ),
+  v3: (
+    <svg width="80" height="52" viewBox="0 0 80 52" fill="none" aria-hidden="true">
+      <rect width="80" height="52" rx="4" fill="currentColor" fillOpacity="0.15" />
+      <rect x="17" y="3" width="46" height="46" rx="3" fill="white" stroke="currentColor" />
+      <R x={27} y={8} w={26} h={4} r={1} />
+      <R x={31} y={15} w={18} h={2} r={1} />
+      <g fill="currentColor" fillOpacity="0.25">
+        <rect x="21" y="21" width="17" height="10" rx="2" />
+        <rect x="42" y="21" width="17" height="10" rx="2" />
+      </g>
+      <R x={21} y={35} w={38} h={2} r={1} />
+      <R x={21} y={42} w={19} h={4} r={1} />
+      <R x={44} y={42} w={15} h={4} r={1} />
+    </svg>
+  ),
+};
+
 // Testimonials layouts
 export const TestimonialsSkeletons = {
   masonry: (

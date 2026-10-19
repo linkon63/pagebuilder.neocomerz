@@ -7,7 +7,7 @@ import "../styles/puck-overrides.css";
 import { config } from "../puck.config";
 import { BuilderSessionProvider } from "@/components/BuilderSessionProvider";
 import type { BuilderSession } from "@/lib/builder-session";
-import { withTenantDefaults, type PuckData } from "@/lib/puck-data";
+import { preparePageDataForSave, withTenantDefaults, type PuckData } from "@/lib/puck-data";
 import { FilePlus2, Loader2, RefreshCw } from "lucide-react";
 
 type PageStatus = "draft" | "published" | "disabled";
@@ -415,7 +415,8 @@ export default function BuilderApp({
             config={config}
             data={data as any}
             onPublish={(nextData) => {
-              setPublishData(withTenantDefaults(nextData as PuckData, session.tenantApiBaseUrl));
+              const cleanData = preparePageDataForSave(nextData as PuckData);
+              setPublishData(withTenantDefaults(cleanData, session.tenantApiBaseUrl));
             }}
           />
         </main>

@@ -3,7 +3,7 @@ import { ComponentConfig, usePuck } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
 import { useBuilderSession } from "@/components/BuilderSessionProvider";
-import { OrderFormUI } from "neocomerz-storefront-ui";
+import { OrderForm as OrderFormUI } from "neocomerz-storefront-ui";
 import { FiChevronDown, FiSearch, FiCheck } from "react-icons/fi";
 import { getLocalizedString, getSizesArray, getVariantDisplayValues, getDynamicSizeLabel } from "@/ui-package/OrderFormHelpers";
 

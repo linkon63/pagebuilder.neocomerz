@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import { FeaturesUI } from "neocomerz-storefront-ui";
+import { Features as FeaturesUI } from "neocomerz-storefront-ui";
 import { ImageUpload } from "../../components/ImageUpload";
 import { VersionPicker, FeaturesSkeletons } from "../../components/VersionPicker";
 import { ColorPicker } from "../../components/ColorPicker";

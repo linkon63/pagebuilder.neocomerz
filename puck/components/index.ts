@@ -17,5 +17,6 @@ export * from "./DesignAndFit";
 export * from "./Quality";
 export * from "./SizeChart";
 export * from "./OrderForm";
+export * from "./OrderConfirmation";
 export * from "./Testimonials";
 export * from "./FAQ";

@@ -1,6 +1,6 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
-import { FAQUI } from "neocomerz-storefront-ui";
+import { FAQ as FAQUI } from "neocomerz-storefront-ui";
 import { ColorPicker } from "../../components/ColorPicker";
 import { VersionPicker, FAQSkeletons } from "../../components/VersionPicker";
 

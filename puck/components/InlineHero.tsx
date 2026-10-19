@@ -3,7 +3,7 @@ import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
 import { ColorPicker } from "../../components/ColorPicker";
 import { VersionPicker, HeroSkeletons } from "../../components/VersionPicker";
-import { InlineHeroUI } from "neocomerz-storefront-ui";
+import { InlineHero as InlineHeroUI } from "neocomerz-storefront-ui";
 
 const VERSION_OPTIONS = [
   { value: "default", label: "Classic",  description: "Full-width bg, text left aligned",  preview: HeroSkeletons.organic },

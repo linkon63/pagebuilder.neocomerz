@@ -48,7 +48,7 @@ export const categories: Config<PuckProps>["categories"] = {
 
   COMMERCE: {
     title: "Commerce",
-    components: ["OrderForm"],
+    components: ["OrderForm", "OrderConfirmation"],
   },
 
   SOCIAL_PROOF: {

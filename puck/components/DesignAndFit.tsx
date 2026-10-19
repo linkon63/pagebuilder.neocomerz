@@ -1,7 +1,7 @@
 import { ComponentConfig } from "@puckeditor/core";
 import { PuckProps } from "../types/puck";
 import { ImageUpload } from "../../components/ImageUpload";
-import { DesignAndFitUI } from "neocomerz-storefront-ui";
+import { DesignAndFit as DesignAndFitUI } from "neocomerz-storefront-ui";
 import { VersionPicker, DesignAndFitSkeletons } from "../../components/VersionPicker";
 import { ColorPicker } from "../../components/ColorPicker";
 
