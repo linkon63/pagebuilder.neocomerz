@@ -135,9 +135,19 @@ export type PuckProps = {
   };
 
   OrderForm: {
+    productSelectionMode?: "single" | "multiple";
+    products?: {
+      productId: string | number;
+      allowedVariants?: { id?: string | number; name?: string }[];
+      maxVariantsToShow?: number;
+      productName?: string;
+      productImage?: string;
+      productImageAlt?: string;
+      productPrice?: string;
+    }[];
     API_SECTION?: any; apiBaseUrlInfo?: any; PRODUCT_SECTION?: any; UI_SECTION?: any;
     apiBaseUrl?: string; productId?: string | number;
-    allowedVariants?: { name: string }[];
+    allowedVariants?: { id?: string | number; name?: string }[];
     title?: string; description?: string; submitButtonText?: string;
     productImage?: string; productImageAlt?: string;
     productName?: string; productPrice?: string;
