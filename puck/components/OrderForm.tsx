@@ -5,7 +5,9 @@ import { ImageUpload } from "../../components/ImageUpload";
 import { useBuilderSession } from "@/components/BuilderSessionProvider";
 import { OrderForm as OrderFormUI } from "neocomerz-storefront-ui";
 import { FiChevronDown, FiSearch, FiCheck } from "react-icons/fi";
-import { getLocalizedString, getSizesArray, getVariantDisplayValues, getDynamicSizeLabel } from "@/ui-package/OrderFormHelpers";
+import { MultiProductSelector } from "../../components/MultiProductSelector";
+import { useOrderFormCatalog } from "../../hooks/useOrderFormCatalog";
+import { getLocalizedString, getSizesArray, getVariantDisplayValues } from "@/ui-package/OrderFormHelpers";
 
 
 const productImageSrc = "/ui-images/products/product2.webp";
@@ -37,6 +39,10 @@ const ApiBaseUrlInfo = () => {
   );
 };
 
+const OrderFormPreview = (props: PuckProps["OrderForm"]) => (
+  <OrderFormUI {...props} productApiBaseUrl="/api" />
+);
+
 
 
 // Helper to render product image safely
@@ -55,38 +61,37 @@ const renderProductImage = (p: any, className: string) => {
 };
 
 const ProductSelector = ({ value, onChange, id }: any) => {
-  const { appState } = usePuck();
-  const session = useBuilderSession();
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { appState, dispatch } = usePuck();
+  const catalog = useOrderFormCatalog([], true);
+  const products = catalog.items;
+  const loading = catalog.loading;
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const props = getSelectedProps(appState);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch("/api/products", {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          cache: "no-store",
-        });
-        const data = await res.json();
-        const items = Array.isArray(data) ? data : data.data || data.products || [];
-        setProducts(items);
-      } catch (err) {
-        console.warn("Puck products fetch failed:", err instanceof Error ? err.message : String(err));
-      } finally {
-        setLoading(false);
-      }
+  const selectProduct = (product: any) => {
+    const selectedId = String(product.id);
+    onChange(selectedId);
+    const selector = appState.ui.itemSelector;
+    if (!selector) return;
+    const patch = {
+      productId: selectedId,
+      productName: getLocalizedString(product.name || product.title || ""),
+      productImage: product.image || product.thumbnail_image || product.thumbnail || product.thumbnail_url || "",
+      productPrice: String(product.discount_price ?? product.discounted_price ?? product.current_pricing?.discount_price ?? product.current_pricing?.discounted_price ?? product.retail_price ?? product.current_pricing?.retail_price ?? product.unit_price ?? product.current_pricing?.unit_price ?? product.price ?? ""),
     };
-    void fetchProducts();
-  }, [session?.tenantApiBaseUrl]);
+    dispatch({
+      type: "setData",
+      data: (previous: any) => {
+        const replace = (items: any[] = []) => items.map((item, index) => index === selector.index ? { ...item, props: { ...item.props, ...patch } } : item);
+        return selector.zone
+          ? { zones: { ...previous.zones, [selector.zone]: replace(previous.zones?.[selector.zone]) } }
+          : { content: replace(previous.content) };
+      },
+    });
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -162,7 +167,7 @@ const ProductSelector = ({ value, onChange, id }: any) => {
                       <div
                         key={p.id}
                         onClick={() => {
-                          onChange(String(p.id));
+                          selectProduct(p);
                           setIsOpen(false);
                           setSearchTerm("");
                         }}
@@ -197,42 +202,17 @@ const ProductSelector = ({ value, onChange, id }: any) => {
   );
 };
 
-const VariantSelector = ({ value, onChange, id }: any) => {
+const VariantSelector = ({ value, onChange, id, productId: explicitProductId, detail: suppliedDetail }: any) => {
   const { appState } = usePuck();
-  const session = useBuilderSession();
-  const [product, setProduct] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const props = getSelectedProps(appState);
 
-  const productId = props?.productId;
-
-  useEffect(() => {
-    if (!productId) return;
-    const fetchProduct = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/products/${productId}`, {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          cache: "no-store",
-        });
-        const data = await res.json();
-
-        const pData = data.data || data.product || data;
-        setProduct(pData);
-      } catch (err) {
-        console.warn("Puck variant fetch failed:", err instanceof Error ? err.message : String(err));
-      } finally {
-        setLoading(false);
-      }
-    };
-    void fetchProduct();
-  }, [productId, session?.tenantApiBaseUrl]);
+  const productId = explicitProductId ?? props?.productId;
+  const catalog = useOrderFormCatalog(productId ? [productId] : []);
+  const product = suppliedDetail ?? catalog.details[String(productId ?? "")];
+  const loading = catalog.loading;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -244,53 +224,26 @@ const VariantSelector = ({ value, onChange, id }: any) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const availableVariantNames = new Set<string>();
-
-  if (product) {
-    const variants = product.variants || product.attributes || [];
-    variants.forEach((v: any) => {
-      const { label } = getVariantDisplayValues(v);
-      const vLabel = label || 'Variant'; 
-      if (vLabel && vLabel.toLowerCase() !== 'variant') {
-        availableVariantNames.add(vLabel);
-      }
-
-      const vSizes = getSizesArray(v.sizes);
-      if (vSizes.length) {
-         let sizeLabel = getDynamicSizeLabel(v, product);
-         if (sizeLabel === 'Variant' && label) sizeLabel = label;
-         if (sizeLabel && sizeLabel.toLowerCase() !== 'variant') {
-           availableVariantNames.add(sizeLabel);
-         }
-      }
-    });
-    
-    const pSizes = getSizesArray(product.sizes);
-    if (pSizes.length > 0) {
-       const sizeLabel = getDynamicSizeLabel(null, product);
-       if (sizeLabel && sizeLabel.toLowerCase() !== 'variant') {
-         availableVariantNames.add(sizeLabel);
-       }
-    }
-  }
-
-  const uniqueVariantNames = Array.from(availableVariantNames).filter(Boolean);
-  
-  if (uniqueVariantNames.length === 0 && product) {
-     uniqueVariantNames.push('Default');
-  }
+  const variants = Array.isArray(product?.variants) ? product.variants : Array.isArray(product?.attributes) ? product.attributes : [];
+  const getVariantLabel = (variant: any) => {
+    const { label, value } = getVariantDisplayValues(variant);
+    const sizes = getSizesArray(variant?.sizes).join(", ");
+    const price = variant?.discount_price ?? variant?.discounted_price ?? variant?.current_pricing?.discount_price ?? variant?.current_pricing?.discounted_price ?? variant?.retail_price ?? variant?.current_pricing?.retail_price ?? variant?.unit_price ?? variant?.current_pricing?.unit_price ?? variant?.price;
+    const main = [label, value].filter(Boolean).join(": ") || String(variant?.sku || variant?.name || variant?.title || `Variant ${variant?.id}`);
+    return [main, sizes, price !== undefined && price !== "" ? `৳${price}` : ""].filter(Boolean).join(" — ");
+  };
 
   const selectedList = Array.isArray(value) ? value : [];
 
-  const handleToggle = (opt: string) => {
-    const name = String(opt);
-    const existingIndex = selectedList.findIndex((item: any) => item.name === name);
+  const handleToggle = (variant: any) => {
+    const variantId = String(variant.id);
+    const existingIndex = selectedList.findIndex((item: any) => String(item.id ?? "") === variantId);
     if (existingIndex >= 0) {
       const newValues = [...selectedList];
       newValues.splice(existingIndex, 1);
       onChange(newValues);
     } else {
-      onChange([...selectedList, { name }]);
+      onChange([...selectedList, { id: variantId, name: getVariantLabel(variant) }]);
     }
   };
 
@@ -304,6 +257,7 @@ const VariantSelector = ({ value, onChange, id }: any) => {
 
   return (
     <div className="flex flex-col gap-2 mt-1 relative z-40">
+      {catalog.error ? <p role="alert" className="text-xs text-red-700">{catalog.error} <button type="button" onClick={catalog.retry} className="underline">Retry</button></p> : <></>}
       <div className="relative" ref={dropdownRef}>
         {/* Dropdown Toggle Button */}
         <button
@@ -332,19 +286,20 @@ const VariantSelector = ({ value, onChange, id }: any) => {
             <div className="max-h-64 overflow-y-auto w-full p-2 space-y-2 custom-scrollbar bg-white">
               {loading ? (
                 <div className="p-4 text-center text-sm text-gray-500 animate-pulse">Loading variants from API...</div>
-              ) : uniqueVariantNames.length > 0 ? (
+              ) : variants.length > 0 ? (
                 <div className="flex flex-col gap-2 p-1">
-                  {uniqueVariantNames.map((opt, i) => {
-                    const isSelected = selectedList.some((item: any) => item.name === opt);
+                  {variants.map((variant: any, i: number) => {
+                    const variantId = String(variant.id ?? i);
+                    const isSelected = selectedList.some((item: any) => String(item.id ?? "") === variantId);
                     return (
-                      <label key={`${opt}-${i}`} className={`flex flex-row items-center cursor-pointer px-3 py-2 rounded-lg border text-sm transition-all duration-200 w-full ${isSelected ? 'bg-blue-50 border-blue-400 text-blue-800 shadow-sm font-semibold' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'}`}>
+                      <label key={`${variantId}-${i}`} className={`flex flex-row items-center cursor-pointer px-3 py-2 rounded-lg border text-sm transition-all duration-200 w-full ${isSelected ? 'bg-blue-50 border-blue-400 text-blue-800 shadow-sm font-semibold' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'}`}>
                         <input 
                           type="checkbox" 
                           className="mr-3 w-4 h-4 rounded text-blue-600 border-gray-300 focus:ring-blue-500"
                           checked={isSelected} 
-                          onChange={() => handleToggle(opt)} 
+                          onChange={() => handleToggle(variant)}
                         />
-                        <span className="font-medium whitespace-nowrap">{opt}</span>
+                        <span className="font-medium">{getVariantLabel(variant)}</span>
                       </label>
                     );
                   })}
@@ -360,7 +315,7 @@ const VariantSelector = ({ value, onChange, id }: any) => {
       </div>
 
       <div className="text-[10px] text-gray-400 mt-0.5 leading-tight">
-        *If no variants are selected, ALL active variants for the API product will be shown by default.
+        *If no variants are selected, all active variants from this product are available.
       </div>
     </div>
   );
@@ -368,6 +323,23 @@ const VariantSelector = ({ value, onChange, id }: any) => {
 
 export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
   label: "Order Form Component",
+  resolveFields: (data, { fields }) => {
+    const multiple = data.props.productSelectionMode
+      ? data.props.productSelectionMode === "multiple"
+      : data.props.products !== undefined;
+    const resolved = { ...fields };
+    if (multiple) {
+      delete resolved.productId;
+      delete resolved.allowedVariants;
+      delete resolved.productName;
+      delete resolved.productPrice;
+      delete resolved.productImage;
+      delete resolved.productImageAlt;
+    } else {
+      delete resolved.products;
+    }
+    return resolved;
+  },
   fields: {
     API_SECTION: {
       type: "custom",
@@ -380,6 +352,23 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
     PRODUCT_SECTION: {
       type: "custom",
       render: () => <div className="text-xs font-bold text-gray-500 mt-4 mb-1 uppercase">Product Selection</div>,
+    },
+    productSelectionMode: {
+      type: "radio",
+      label: "PRODUCT MODE",
+      options: [
+        { label: "Single product", value: "single" },
+        { label: "Multiple products", value: "multiple" },
+      ],
+    },
+    products: {
+      type: "custom",
+      label: "PRODUCTS",
+      render: ({ value, onChange }) => (
+        <MultiProductSelector value={value} onChange={onChange}
+          renderVariants={(product, detail, changeVariants) => <VariantSelector productId={product.productId} detail={detail} value={product.allowedVariants} onChange={changeVariants} />}
+        />
+      ),
     },
     productId: {
       type: "custom",
@@ -449,6 +438,7 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
     },
   },
   defaultProps: {
+    productSelectionMode: "single",
     apiBaseUrl: "",
     productId: process.env.NEXT_PUBLIC_PRODUCT_ID || "3",
     allowedVariants: [],
@@ -474,5 +464,5 @@ export const OrderForm: ComponentConfig<PuckProps["OrderForm"]> = {
     textColor: "#27272a",
     backgroundColor: "#f3e8ff",
   },
-  render: (props) => <OrderFormUI {...props} />,
+  render: (props) => <OrderFormPreview {...props} />,
 };
